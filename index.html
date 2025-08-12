@@ -102,14 +102,66 @@
             stroke: #60a5fa;
         }
 
-        /* SVG 선교지 점 스타일 - 별처럼 반짝이는 효과 */
-        .mission-dot {
-            transition: all 0.3s ease;
+        /* 네비게이션 핀 스타일 */
+        .mission-pin {
+            position: absolute;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
-            filter: drop-shadow(0 0 4px currentColor);
-            /* GPU 가속 최적화 */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
             transform: translateZ(0);
-            will-change: transform, opacity;
+        }
+        
+        .mission-pin::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: inherit;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mission-pin::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            transform: translate(-50%, -65%);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .mission-pin:hover {
+            transform: scale(1.2) translateY(-2px) translateZ(0);
+        }
+        
+        .mission-pin:hover::before {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .mission-pin:active {
+            transform: scale(1.1) translateY(0px) translateZ(0);
+        }
+        
+        /* 핀 색상별 스타일 */
+        .mission-pin.completed {
+            background: #1e40af;
+        }
+        
+        .mission-pin.planned {
+            background: #3b82f6;
+        }
+        
+        .mission-pin.future {
+            background: #60a5fa;
         }
         
         /* 데스크톱에서만 호버 효과 적용 */
@@ -1260,9 +1312,9 @@
             checkUnmatchedCountries();
         }
         
-        // 실제 도시 좌표를 사용해서 점 배치
-        function updateCityDotPositions() {
-            console.log("=== 실제 도시 좌표 사용 점 배치 시작 ===");
+        // 실제 도시 좌표를 사용해서 핀 위치 설정
+        function updatePinPositions() {
+            console.log("=== 핀 위치 설정 시작 ===");
             
             const dots = mapGroup.selectAll('.mission-dot');
             let positionedCount = 0;
@@ -1483,60 +1535,56 @@
 
         // 선교 위치를 SVG circle로 렌더링 (지도와 완전 동기화)
         function renderMissionLocations() {
-            console.log("=== SVG 점 렌더링 시작 ===");
+            console.log("=== 핀 렌더링 시작 ===");
             
-            // 기존 점들 제거
-            mapGroup.selectAll('.mission-dot').remove();
+            // 기존 핀들 제거
+            document.querySelectorAll('.mission-pin').forEach(pin => pin.remove());
             
             if (!missionsData || !missionsData.missions) {
                 console.warn("선교 데이터가 없습니다");
                 return;
             }
             
-            // mapGroup 내부에 점들 추가 (지도와 함께 확대/축소됨)
-            const dots = mapGroup.selectAll('.mission-dot')
-                .data(missionsData.missions)
-                .enter()
-                .append('circle')
-                .attr('class', d => `mission-dot ${d.id} ${d.status}`)
-                .attr('r', 2)
-                .attr('data-status', d => d.status)
-                .attr('data-mission-id', d => d.id)
-                .attr('data-country', d => d.country)
-                .style('cursor', 'pointer')
-                .style('opacity', 0) // 초기에 숨김
-                .on('click', function(event, d) {
-                    showMissionDetails(d);
-                })
-                .on('mouseover', function(event, d) {
-                    d3.select(this).attr('r', 4);
-                    showTooltip(event, d);
-                })
-                .on('mouseout', function(event, d) {
-                    d3.select(this).attr('r', 2);
+            // 지도 컨테이너 찾기
+            const mapContainer = document.querySelector('.world-map');
+            
+            missionsData.missions.forEach(mission => {
+                // HTML 핀 요소 생성
+                const pin = document.createElement('div');
+                pin.className = `mission-pin ${mission.status}`;
+                pin.dataset.status = mission.status;
+                pin.dataset.missionId = mission.id;
+                pin.dataset.country = mission.country;
+                pin.style.opacity = '0';
+                pin.style.transform = 'translateZ(0)';
+                
+                // 이벤트 리스너 추가
+                pin.addEventListener('click', () => {
+                    showMissionDetails(mission);
+                });
+                
+                pin.addEventListener('mouseenter', (event) => {
+                    showTooltip(event, mission);
+                });
+                
+                pin.addEventListener('mouseleave', () => {
                     hideTooltip();
-                })
-                .on('mousemove', function(event, d) {
+                });
+                
+                pin.addEventListener('mousemove', (event) => {
                     updateTooltipPosition(event);
                 });
+                
+                // 지도에 추가
+                mapContainer.appendChild(pin);
+            });
             
-            // 상태별 색상과 애니메이션 적용 (새로운 색상 팔레트)
-            dots.style('fill', d => {
-                switch(d.status) {
-                    case 'completed': return '#1e40af';  // 진한 블루 (완료)
-                    case 'planned': return '#3b82f6';    // 미디웄 블루 (진행중) 
-                    case 'future': return '#60a5fa';     // 밝은 블루 (계획중)
-                    default: return '#93c5fd';
-                }
-            })
-            .style('filter', 'none')
-            .style('stroke', 'none')
-            .style('transition', 'all 0.3s ease');
+            console.log(`${missionsData.missions.length}개 핀 생성 완료`);
             
-            console.log(`${missionsData.missions.length}개 SVG 점 생성 완료`);
-            
-            // 실제 도시 좌표 사용해서 점 배치
-            updateCityDotPositions();
+            // 실제 좌표로 핀 위치 설정
+            setTimeout(() => {
+                setPinPositions();
+            }, 100);
         }
         
         // 한국어 ↔ 영어 국가명 매핑 테이블
@@ -1614,29 +1662,87 @@
             "지부티": "Djibouti",
             "소말리아": "Somalia"
         };
-
         
-        // SVG 점들에 대한 필터링 업데이트
-        function updateSVGFilter() {
-            if (!missionsData || !mapGroup) return;
+        // 핀 위치 설정 함수
+        function setPinPositions() {
+            console.log("=== 핀 위치 설정 시작 ===");
             
-            const dots = mapGroup.selectAll('.mission-dot');
+            const pins = document.querySelectorAll('.mission-pin');
+            let positionedCount = 0;
             
-            dots.each(function(d) {
-                const dot = d3.select(this);
-                const status = d.status;
+            pins.forEach(pin => {
+                const missionId = pin.dataset.missionId;
+                const mission = missionsData.missions.find(m => m.id === missionId);
                 
-                // 필터 조건 검사 (검색 기능 제거)
+                if (!mission) return;
+                
+                // 좌표 데이터 추출
+                const coordinates = mission.coordinates || {};
+                const lat = coordinates.lat;
+                const lng = coordinates.lng;
+                const name = mission.name || mission.id || '알 수 없음';
+                
+                // 유효한 좌표 확인
+                if (lat && lng && lat !== 0 && lng !== 0) {
+                    try {
+                        // D3 projection으로 좌표 변환
+                        const projectedCoords = projection([lng, lat]);
+                        
+                        if (projectedCoords && !isNaN(projectedCoords[0]) && !isNaN(projectedCoords[1])) {
+                            // 지도 컨테이너 크기
+                            const mapContainer = document.querySelector('.world-map');
+                            const mapRect = mapContainer.getBoundingClientRect();
+                            
+                            // SVG 좌표를 픽셀 좌표로 변환
+                            const scaleX = mapRect.width / 1000; // viewBox width
+                            const scaleY = mapRect.height / 500;  // viewBox height
+                            
+                            const pixelX = projectedCoords[0] * scaleX;
+                            const pixelY = projectedCoords[1] * scaleY;
+                            
+                            // 핀 위치 설정 (중앙 정렬)
+                            pin.style.left = `${pixelX - 12}px`;
+                            pin.style.top = `${pixelY - 24}px`;
+                            pin.style.opacity = '1';
+                            
+                            console.log(`✓ ${name}: (${lat}, ${lng}) → (${pixelX.toFixed(1)}, ${pixelY.toFixed(1)})`);
+                            positionedCount++;
+                        } else {
+                            pin.style.opacity = '0';
+                        }
+                    } catch (error) {
+                        console.warn(`${name} 위치 설정 오류:`, error);
+                        pin.style.opacity = '0';
+                    }
+                } else {
+                    console.warn(`${name}: 좌표 없음`);
+                    pin.style.opacity = '0';
+                }
+            });
+            
+            console.log(`${positionedCount}개 핀 위치 설정 완료`);
+        }
+
+        // 핀들에 대한 필터링 업데이트
+        function updateSVGFilter() {
+            if (!missionsData) return;
+            
+            const pins = document.querySelectorAll('.mission-pin');
+            
+            pins.forEach(pin => {
+                const status = pin.dataset.status;
+                
+                // 필터 조건 검사
                 const shouldShow = currentFilter === 'all' || status === currentFilter;
                 
                 if (shouldShow) {
-                    dot.style('opacity', 1)
-                       .style('pointer-events', 'all')
-                       .attr('r', 2);
+                    pin.style.opacity = '1';
+                    pin.style.pointerEvents = 'all';
+                    pin.style.transform = 'scale(1) translateZ(0)';
                 } else {
-                    dot.style('opacity', 0.3)
-                       .style('pointer-events', 'none')
-                       .attr('r', 2);
+                    pin.style.opacity = '0.3';
+                    pin.style.pointerEvents = 'none';
+                    pin.style.transform = 'scale(0.8) translateZ(0)';
                 }
             });
         }
