@@ -4,7 +4,7 @@
       "name": "부천",
       "country": "대한민국",
       "continent": "아시아",
-      "coordinates": { "lat": 37.5665, "lng": 126.978 },
+      "coordinates": { "lat": 36.5612, "lng": 128.010 },
       "status": "completed",
       "description": "대한민국 서울 지역 선교 계획",
       "image": "images/서울.jpg"
@@ -42,7 +42,7 @@
       "name": "",
       "country": "키르기스스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 42.8746, "lng": 74.5698 },
+      "coordinates": { "lat": 41.7777, "lng": 74.6037 },
       "status": "future",
       "description": "키르기스스탄 비슈케크 지역 선교 계획",
       "image": "images/비슈케크.jpg"
@@ -52,7 +52,7 @@
       "name": "",
       "country": "타지키스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 38.5598, "lng": 68.787 },
+      "coordinates": { "lat": 38.9107, "lng": 70.7478 },
       "status": "future",
       "description": "타지키스탄 두샨베 지역 선교 계획",
       "image": "images/두샨베.jpg"
@@ -62,7 +62,7 @@
       "name": "",
       "country": "투르크메니스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 37.9601, "lng": 58.3261 },
+      "coordinates": { "lat": 39.4561, "lng": 58.9967 },
       "status": "future",
       "description": "투르크메니스탄 아슈하바트 지역 선교 계획",
       "image": "images/아슈하바트.jpg"
@@ -72,7 +72,7 @@
       "name": "",
       "country": "아프가니스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 34.5553, "lng": 69.2075 },
+      "coordinates": { "lat": 34.2631, "lng": 66.0009 },
       "status": "future",
       "description": "아프가니스탄 카불 지역 선교 계획",
       "image": "images/카불.jpg"
@@ -82,7 +82,7 @@
       "name": "",
       "country": "이란",
       "continent": "아시아",
-      "coordinates": { "lat": 35.6892, "lng": 51.389 },
+      "coordinates": { "lat": 32.5036, "lng": 1271 },
       "status": "future",
       "description": "이란 테헤란 지역 선교 계획",
       "image": "images/테헤란.jpg"
@@ -92,7 +92,7 @@
       "name": "",
       "country": "이라크",
       "continent": "아시아",
-      "coordinates": { "lat": 33.3152, "lng": 44.3661 },
+      "coordinates": { "lat": 33.2729, "lng": 43.7958 },
       "status": "future",
       "description": "이라크 바그다드 지역 선교 계획",
       "image": "images/바그다드.jpg"
@@ -102,7 +102,7 @@
       "name": "",
       "country": "사우디아라비아",
       "continent": "아시아",
-      "coordinates": { "lat": 24.7136, "lng": 46.6753 },
+      "coordinates": { "lat": 24.9603, "lng": 44.4677 },
       "status": "future",
       "description": "사우디아라비아 리야드 지역 선교 계획",
       "image": "images/리야드.jpg"
@@ -112,7 +112,7 @@
       "name": "",
       "country": "아랍에미레이트",
       "continent": "아시아",
-      "coordinates": { "lat": 24.4539, "lng": 54.3773 },
+      "coordinates": { "lat": 23.9343, "lng": 54.3040 },
       "status": "future",
       "description": "아랍에미레이트 아부다비 지역 선교 계획",
       "image": "images/아부다비.jpg"
@@ -122,7 +122,7 @@
       "name": "",
       "country": "파키스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 33.7294, "lng": 73.0931 },
+      "coordinates": { "lat": 29.4948, "lng": 68.8067 },
       "status": "future",
       "description": "파키스탄 이슬라마바드 지역 선교 계획",
       "image": "images/이슬라마바드.jpg"
@@ -132,10 +132,310 @@
       "name": "",
       "country": "인도",
       "continent": "아시아",
-      "coordinates": { "lat": 28.6139, "lng": 77.2090 },
+      "coordinates": { "lat": 22.9157, "lng": 79.6045 },
       "status": "future",
       "description": "인도 뉴델리 지역 선교 계획",
       "image": "images/뉴델리.jpg"
+    },
+    {
+      "id": "콜롬보",
+      "name": "",
+      "country": "스리랑카",
+      "continent": "아시아",
+      "coordinates": { "lat": 7.6098, "lng": 80.6751 },
+      "status": "future",
+      "description": "스리랑카 콜롬보 지역 선교 계획",
+      "image": "images/콜롬보.jpg"
+    },
+    {
+      "id": "카트만두",
+      "name": "",
+      "country": "네팔",
+      "continent": "아시아",
+      "coordinates": { "lat": 28.2641, "lng": 83.8980 },
+      "status": "future",
+      "description": "네팔 카트만두 지역 선교 계획",
+      "image": "images/카트만두.jpg"
+    },
+    {
+      "id": "팀푸",
+      "name": "",
+      "country": "부탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 27.5115, "lng": 90.2878 },
+      "status": "future",
+      "description": "부탄 팀푸 지역 선교 계획",
+      "image": "images/팀푸.jpg"
+    },
+    {
+      "id": "베이징",
+      "name": "",
+      "country": "중국(신장 위구르 자치구)",
+      "continent": "아시아",
+      "coordinates": { "lat": 40.5721, "lng": 86.0700 },
+      "status": "future",
+      "description": "중국 베이징 지역 선교 계획",
+      "image": "images/베이징.jpg"
+    },
+    {
+      "id": "다카",
+      "name": "",
+      "country": "방글라데시",
+      "continent": "아시아",
+      "coordinates": { "lat": 24.2052, "lng": 90.2461 },
+      "status": "future",
+      "description": "방글라데시 다카 지역 선교 계획",
+      "image": "images/다카.jpg"
+    },
+    {
+      "id": "쿠알라룸푸르",
+      "name": "",
+      "country": "말레이시아",
+      "continent": "아시아",
+      "coordinates": { "lat": 3.7286, "lng": 102.4625 },
+      "status": "future",
+      "description": "말레이시아 쿠알라룸푸르 지역 선교 계획",
+      "image": "images/쿠알라룸푸르.jpg"
+    },
+    {
+      "id": "무스카트",
+      "name": "",
+      "country": "오만",
+      "continent": "아시아",
+      "coordinates": { "lat": 19.9092, "lng": 56.3491 },
+      "status": "future",
+      "description": "오만 무스카트 지역 선교 계획",
+      "image": "images/무스카트.jpg"
+    },
+    {
+      "id": "사나",
+      "name": "",
+      "country": "예멘",
+      "continent": "아시아",
+      "coordinates": { "lat": 15.8526, "lng": 47.9056},
+      "status": "future",
+      "description": "예멘 사나 지역 선교 계획",
+      "image": "images/사나.jpg"
+    },
+    {
+      "id": "모스크바",
+      "name": "",
+      "country": "러시아",
+      "continent": "유럽",
+      "coordinates": { "lat": 62.2389, "lng": 93.6403 },
+      "status": "future",
+      "description": "러시아 모스크바 지역 선교 계획",
+      "image": "images/모스크바.jpg"
+    },
+    {
+      "id": "트빌리시",
+      "name": "",
+      "country": "조지아",
+      "continent": "아시아",
+      "coordinates": { "lat": 42.1067, "lng": 43.5502 },
+      "status": "future",
+      "description": "조지아 트빌리시 지역 선교 계획",
+      "image": "images/트빌리시.jpg"
+    },
+    {
+      "id": "바쿠",
+      "name": "",
+      "country": "아제르바이잔",
+      "continent": "아시아",
+      "coordinates": { "lat": 40.3455, "lng": 47.9709 },
+      "status": "future",
+      "description": "아제르바이잔 바쿠 지역 선교 계획",
+      "image": "images/바쿠.jpg"
+    },
+    {
+      "id": "앙카라",
+      "name": "",
+      "country": "튀르키예",
+      "continent": "아시아",
+      "coordinates": { "lat": 38.9345, "lng": 35.2499 },
+      "status": "future",
+      "description": "터키 앙카라 지역 선교 계획",
+      "image": "images/앙카라.jpg"
+    },
+    {
+      "id": "다마스쿠스",
+      "name": "",
+      "country": "시리아",
+      "continent": "아시아",
+      "coordinates": { "lat": 34.9701, "lng": 38.4636 },
+      "status": "future",
+      "description": "시리아 다마스쿠스 지역 선교 계획",
+      "image": "images/다마스쿠스.jpg"
+    },
+    {
+      "id": "베이루트",
+      "name": "",
+      "country": "레바논",
+      "continent": "아시아",
+      "coordinates": { "lat": 33.9437, "lng": 35.7548 },
+      "status": "future",
+      "description": "레바논 베이루트 지역 선교 계획",
+      "image": "images/베이루트.jpg"
+    },
+    {
+      "id": "암만",
+      "name": "",
+      "country": "요르단",
+      "continent": "아시아",
+      "coordinates": { "lat": 30.9148, "lng": 36.7213 },
+      "status": "future",
+      "description": "요르단 암만 지역 선교 계획",
+      "image": "images/암만.jpg"
+    },
+    {
+      "id": "예루살렘",
+      "name": "",
+      "country": "이스라엘",
+      "continent": "아시아",
+      "coordinates": { "lat": 31.2511, "lng": 34.8972 },
+      "status": "future",
+      "description": "이스라엘 예루살렘 지역 선교 계획",
+      "image": "images/예루살렘.jpg"
+    },
+    {
+      "id": "트리폴리",
+      "name": "",
+      "country": "리비아",
+      "continent": "아프리카",
+      "coordinates": { "lat": 27.4101, "lng": 17.2981 },
+      "status": "future",
+      "description": "리비아 트리폴리 지역 선교 계획",
+      "image": "images/트리폴리.jpg"
+    },
+    {
+      "id": "튀니스",
+      "name": "",
+      "country": "튀니지",
+      "continent": "아프리카",
+      "coordinates": { "lat": 34.4373, "lng": 9.5896 },
+      "status": "future",
+      "description": "튀니지 튀니스 지역 선교 계획",
+      "image": "images/튀니스.jpg"
+    },
+    {
+      "id": "카이로",
+      "name": "",
+      "country": "이집트",
+      "continent": "아프리카",
+      "coordinates": { "lat": 27.0455, "lng": 30.0908 },
+      "status": "future",
+      "description": "이집트 카이로 지역 선교 계획",
+      "image": "images/카이로.jpg"
+    },
+    {
+      "id": "알제",
+      "name": "",
+      "country": "알제리",
+      "continent": "아프리카",
+      "coordinates": { "lat": 27.9909, "lng": 2.9472 },
+      "status": "future",
+      "description": "알제리 알제 지역 선교 계획",
+      "image": "images/알제.jpg"
+    },
+    {
+      "id": "라바트",
+      "name": "",
+      "country": "모로코",
+      "continent": "아프리카",
+      "coordinates": { "lat": 31.8460, "lng": -6.6916},
+      "status": "future",
+      "description": "모로코 라바트 지역 선교 계획",
+      "image": "images/라바트.jpg"
+    },
+    {
+      "id": "엘아이운",
+      "name": "",
+      "country": "서사하라",
+      "continent": "아프리카",
+      "coordinates": { "lat": 25.2239, "lng": -13.1700 },
+      "status": "future",
+      "description": "서사하라 엘아이운 지역 선교 계획",
+      "image": "images/엘아이운.jpg"
+    },
+    {
+      "id": "누악쇼트",
+      "name": "",
+      "country": "모리타니",
+      "continent": "아프리카",
+      "coordinates": { "lat": 20.5415, "lng": -10.0948 },
+      "status": "future",
+      "description": "모리타니 누악쇼트 지역 선교 계획",
+      "image": "images/누악쇼트.jpg"
+    },
+    {
+      "id": "바마코",
+      "name": "",
+      "country": "말리",
+      "continent": "아프리카",
+      "coordinates": { "lat": 17.9091, "lng": -2.0173 },
+      "status": "future",
+      "description": "말리 바마코 지역 선교 계획",
+      "image": "images/바마코.jpg"
+    },
+    {
+      "id": "니아메",
+      "name": "",
+      "country": "니제르",
+      "continent": "아프리카",
+      "coordinates": { "lat": 17.5576, "lng": 9.5863 },
+      "status": "future",
+      "description": "니제르 니아메 지역 선교 계획",
+      "image": "images/니아메.jpg"
+    },
+    {
+      "id": "은자메나",
+      "name": "",
+      "country": "차드",
+      "continent": "아프리카",
+      "coordinates": { "lat": 14.7221, "lng": 18.5658 },
+      "status": "future",
+      "description": "차드 은자메나 지역 선교 계획",
+      "image": "images/은자메나.jpg"
+    },
+    {
+      "id": "하르툼",
+      "name": "",
+      "country": "수단",
+      "continent": "아프리카",
+      "coordinates": { "lat": 16.1747, "lng": 30.4638 },
+      "status": "future",
+      "description": "수단 하르툼 지역 선교 계획",
+      "image": "images/하르툼.jpg"
+    },
+    {
+      "id": "아스마라",
+      "name": "",
+      "country": "에리트레아",
+      "continent": "아프리카",
+      "coordinates": { "lat": 16.1747, "lng": 30.4638 },
+      "status": "future",
+      "description": "에리트레아 아스마라 지역 선교 계획",
+      "image": "images/아스마라.jpg"
+    },
+    {
+      "id": "지부티",
+      "name": "",
+      "country": "지부티",
+      "continent": "아프리카",
+      "coordinates": { "lat": 11.7856, "lng": 42.5047 },
+      "status": "future",
+      "description": "지부티 지부티 지역 선교 계획",
+      "image": "images/지부티.jpg"
+    },
+    {
+      "id": "모가디슈",
+      "name": "모가디슈",
+      "country": "소말리아",
+      "continent": "아프리카",
+      "coordinates": { "lat": 3.5203, "lng": 46.0006 },
+      "status": "future",
+      "description": "소말리아 모가디슈 지역 선교 계획",
+      "image": "images/모가디슈.jpg"
     }
   ],
   "statistics": {
