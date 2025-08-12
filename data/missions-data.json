@@ -42,7 +42,7 @@
       "name": "",
       "country": "키르기스스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 41.7777, "lng": 74.6037 },
+      "coordinates": { "lat": 42.3579, "lng": 77.3452 },
       "status": "future",
       "description": "키르기스스탄 비슈케크 지역 선교 계획",
       "image": "images/비슈케크.jpg"
@@ -62,7 +62,7 @@
       "name": "",
       "country": "투르크메니스탄",
       "continent": "아시아",
-      "coordinates": { "lat": 39.4561, "lng": 58.9967 },
+      "coordinates": { "lat": 39.4561, "lng": 55.3967 },
       "status": "future",
       "description": "투르크메니스탄 아슈하바트 지역 선교 계획",
       "image": "images/아슈하바트.jpg"
@@ -436,6 +436,26 @@
       "status": "future",
       "description": "소말리아 모가디슈 지역 선교 계획",
       "image": "images/모가디슈.jpg"
+    },
+    {
+      "id": "타슈겐트",
+      "name": "타슈겐트",
+      "country": "우즈베키스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 41.2784, "lng": 69.2273 },
+      "status": "planned",
+      "description": "타슈겐트",
+      "image": "images/타슈겐트.jpg"
+    },
+    {
+      "id": "사마르칸트",
+      "name": "사마르칸트",
+      "country": "우즈베키스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 39.7027, "lng": 66.7174 },
+      "status": "planned",
+      "description": "사마르칸트",
+      "image": "images/사마르칸트.jpg"
     }
   ],
   "statistics": {
