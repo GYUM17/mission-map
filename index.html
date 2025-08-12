@@ -105,19 +105,20 @@
         /* 네비게이션 핀 스타일 */
         .mission-pin {
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
             transform: translateZ(0);
+            background: transparent;
         }
         
         .mission-pin::before {
             content: '';
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             background: #3b82f6; /* 기본 색상 */
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
@@ -130,8 +131,8 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 50%;
             transform: translate(-50%, -65%);
@@ -1566,16 +1567,19 @@
                             
                             // foreignObject로 HTML 핀 삽입
                             const foreignObject = pinGroup.append('foreignObject')
-                                .attr('x', -12) // 핀 중앙 정렬
-                                .attr('y', -24) // 핀 하단이 정확한 위치
-                                .attr('width', 24)
-                                .attr('height', 24);
+                                .attr('x', -18) // 핀 중앙 정렬 (36px / 2 = 18px)
+                                .attr('y', -36) // 핀 하단이 정확한 위치, 호버 확대 공간 확보
+                                .attr('width', 36)
+                                .attr('height', 36);
                             
-                            // HTML div 생성
+                            // HTML div 생성 - 컨테이너 중앙에 18px 핀 배치
                             const pinDiv = foreignObject.append('xhtml:div')
                                 .attr('class', `mission-pin ${mission.status}`)
-                                .style('width', '24px')
-                                .style('height', '24px')
+                                .style('width', '18px')
+                                .style('height', '18px')
+                                .style('position', 'absolute')
+                                .style('top', '18px')  // 36px 컨테이너의 하단에서 18px 위
+                                .style('left', '9px')  // 중앙 정렬 (36-18)/2 = 9px
                                 .style('cursor', 'pointer')
                                 .on('click', () => {
                                     showMissionDetails(mission);
