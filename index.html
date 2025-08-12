@@ -97,32 +97,30 @@
             transition: all 0.3s ease;
         }
         
-        .country-path:hover {
-            fill: #93c5fd;
-            stroke: #60a5fa;
-        }
-
+        
         /* 네비게이션 핀 스타일 */
         .mission-pin {
-            position: absolute;
-            width: 18px;
-            height: 18px;
+            position: relative;
+            width: 12px;
+            height: 12px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
-            transform: translateZ(0);
+            z-index: 100;
             background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .mission-pin::before {
             content: '';
             position: absolute;
-            width: 18px;
-            height: 18px;
+            width: 12px;
+            height: 12px;
             background: #3b82f6; /* 기본 색상 */
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -131,13 +129,16 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            transform: translate(-50%, -65%);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            z-index: 1;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 2.5px;
+            transform: translate(-1.8px, -2.5px) translateZ(0);
+            transform-origin: center;
+            will-change: auto;
+            backface-visibility: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            z-index: 2;
         }
         
         .mission-pin:hover {
@@ -145,7 +146,7 @@
         }
         
         .mission-pin:hover::before {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.0);
         }
         
         .mission-pin:active {
@@ -154,15 +155,15 @@
         
         /* 핀 색상별 스타일 - ::before에만 적용 */
         .mission-pin.completed::before {
-            background: #1e40af;
-        }
-        
-        .mission-pin.planned::before {
             background: #3b82f6;
         }
         
+        .mission-pin.planned::before {
+            background: #eab308;
+        }
+        
         .mission-pin.future::before {
-            background: #60a5fa;
+            background: #ef4444;
         }
         
         /* 데스크톱에서만 호버 효과 적용 */
@@ -1563,23 +1564,24 @@
                             // SVG 그룹 생성 (지도와 함께 확대/축소됨)
                             const pinGroup = mapGroup.append('g')
                                 .attr('class', 'mission-pin-group')
-                                .attr('transform', `translate(${projectedCoords[0]}, ${projectedCoords[1]})`);
+                                .attr('transform', `translate(${projectedCoords[0]}, ${projectedCoords[1]})`)
+                                .style('z-index', '100');
                             
                             // foreignObject로 HTML 핀 삽입
                             const foreignObject = pinGroup.append('foreignObject')
-                                .attr('x', -18) // 핀 중앙 정렬 (36px / 2 = 18px)
-                                .attr('y', -36) // 핀 하단이 정확한 위치, 호버 확대 공간 확보
-                                .attr('width', 36)
-                                .attr('height', 36);
+                                .attr('x', -10) // 핀 중앙 정렬 (20px / 2 = 10px)
+                                .attr('y', -20) // 핀 하단이 정확한 위치, 호버 확대 공간 확보
+                                .attr('width', 25)
+                                .attr('height', 25);
                             
-                            // HTML div 생성 - 컨테이너 중앙에 18px 핀 배치
+                            // HTML div 생성 - 컨테이너 중앙에 12px 핀 배치
                             const pinDiv = foreignObject.append('xhtml:div')
                                 .attr('class', `mission-pin ${mission.status}`)
-                                .style('width', '18px')
-                                .style('height', '18px')
+                                .style('width', '12px')
+                                .style('height', '12px')
                                 .style('position', 'absolute')
-                                .style('top', '18px')  // 36px 컨테이너의 하단에서 18px 위
-                                .style('left', '9px')  // 중앙 정렬 (36-18)/2 = 9px
+                                .style('top', '8px')   // 20px 컨테이너의 하단에서 12px 위
+                                .style('left', '4px')  // 중앙 정렬 (20-12)/2 = 4px
                                 .style('cursor', 'pointer')
                                 .on('click', () => {
                                     showMissionDetails(mission);
@@ -1916,6 +1918,7 @@
 
         // 툴팁 관련 함수들
         const tooltip = document.getElementById('tooltip');
+        
         
         function showTooltip(event, data) {
             const country = safeGet(data, 'country', '');
