@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>사랑열매교회 선교사역</title>
     
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- D3.js 및 TopoJSON 라이브러리 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
@@ -17,9 +20,9 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: white;
+            font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: #ffffff;
+            color: #2c3e50;
             overflow-x: hidden;
             cursor: default;
             line-height: 1.6;
@@ -37,9 +40,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .nav {
@@ -48,14 +52,18 @@
         }
 
         .nav a {
-            color: #9E9E9E;
+            color: #6c757d;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
         }
 
         .nav a:hover, .nav a.active {
-            color: #E0E0E0;
+            color: #1e40af;
+            background: rgba(30, 64, 175, 0.1);
         }
 
 
@@ -72,7 +80,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #121212 0%, #1a1a1a 50%, #121212 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             opacity: 1;
         }
 
@@ -83,9 +91,15 @@
         }
 
         .country-path {
-            fill: #1E1E1E;
-            stroke: #2A2A2A;
-            stroke-width: 0.5;
+            fill: #b8e0f5;
+            stroke: #93c5fd;
+            stroke-width: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .country-path:hover {
+            fill: #93c5fd;
+            stroke: #60a5fa;
         }
 
         /* SVG 선교지 점 스타일 - 별처럼 반짝이는 효과 */
@@ -118,9 +132,11 @@
         }
 
         .filter-btn {
-            background: #333333;
-            border: 2px solid #444;
-            color: #E0E0E0;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             padding: 12px 20px;
             min-height: 44px;
             border-radius: 25px;
@@ -141,19 +157,19 @@
         }
 
         .filter-btn.active {
-            color: #ffffff;
-            border-color: #888;
-            background: #444444;
+            color: #1e40af;
+            border-color: #3b82f6;
+            background: rgba(30, 64, 175, 0.1);
         }
         
         /* 데스크톱에서만 호버 효과 적용 */
         @media (hover: hover) and (pointer: fine) {
             .filter-btn:hover, .filter-btn.active {
-                color: #ffffff;
-                border-color: #888;
-                background: #444444;
+                color: #1e40af;
+                border-color: #3b82f6;
+                background: rgba(30, 64, 175, 0.15);
                 transform: translateY(-1px);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2);
             }
         }
         
@@ -163,21 +179,21 @@
         
         /* 필터 버튼 키보드 포커스 */
         .filter-btn:focus {
-            outline: 2px solid #00E676;
+            outline: 2px solid #3b82f6;
             outline-offset: 2px;
         }
         
         /* 터치 기기용 필터 버튼 상태 */
         @media (hover: none) and (pointer: coarse) {
             .filter-btn:hover {
-                background: #333333;
+                background: rgba(255, 255, 255, 0.9);
                 transform: none;
-                box-shadow: none;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 border-color: #444;
             }
             
             .filter-btn:active {
-                background: #555;
+                background: rgba(30, 64, 175, 0.2);
                 transform: translateY(1px);
             }
         }
@@ -343,7 +359,7 @@
         
         /* 키보드 포커스 스타일 */
         .zoom-btn:focus {
-            outline: 2px solid #00E676;
+            outline: 2px solid #3b82f6;
             outline-offset: 2px;
         }
         
@@ -986,7 +1002,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">사랑열매교회</div>
+        <div class="logo" style="font-size: 1.3rem; font-weight: 600; color: #1e40af; letter-spacing: -0.025em;">사랑열매교회</div>
         <nav class="nav">
             <a href="index.html" class="active">선교 현황</a>
             <a href="church-intro.html">교회 소개</a>
@@ -1026,15 +1042,15 @@
     <div class="legend">
         <div class="legend-title">선교 현황</div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #4CAF50;"></div>
+            <div class="legend-dot" style="background: #1e40af;"></div>
             <span>개척 완료</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #FFC107;"></div>
+            <div class="legend-dot" style="background: #3b82f6;"></div>
             <span>진행 중</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #FF4444;"></div>
+            <div class="legend-dot" style="background: #60a5fa;"></div>
             <span>계획 중</span>
         </div>
     </div>
@@ -1174,9 +1190,9 @@
                         .append("path")
                         .attr("d", path)
                         .attr("class", "country-path")
-                        .style("fill", "#4a4a4a")
-                        .style("stroke", "#2a2a2a")
-                        .style("stroke-width", "0.5")
+                        .style("fill", "#b8e0f5")
+                        .style("stroke", "#93c5fd")
+                        .style("stroke-width", "0.8")
                         .style("opacity", "1");
                     
                     loading.style.display = 'none';
@@ -1507,10 +1523,10 @@
             // 상태별 색상과 애니메이션 적용 (새로운 색상 팔레트)
             dots.style('fill', d => {
                 switch(d.status) {
-                    case 'completed': return '#4CAF50';  // 따뜻한 초록 (완료)
-                    case 'planned': return '#FFC107';    // 골드 옐로우 (진행중)
-                    case 'future': return '#FF4444';     // 빨간색 (계획중)
-                    default: return '#03A9F4';
+                    case 'completed': return '#1e40af';  // 진한 블루 (완료)
+                    case 'planned': return '#3b82f6';    // 미디웄 블루 (진행중) 
+                    case 'future': return '#60a5fa';     // 밝은 블루 (계획중)
+                    default: return '#93c5fd';
                 }
             })
             .style('filter', 'none')
