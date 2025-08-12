@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선교지 좌표 도우미</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .result {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+        
+        .coordinates {
+            background: #e8f5e8;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            background: #2196F3;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+        
+        .examples {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .examples h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        
+        .city-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .city-btn {
+            background: #6c757d;
+            font-size: 14px;
+            padding: 8px 12px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 선교지 좌표 도우미</h1>
+        
+        <div class="examples">
+            <h3>💡 사용법</h3>
+            <p>1. 도시명 또는 국가명을 입력하고 "좌표 검색" 버튼 클릭</p>
+            <p>2. 또는 아래 샘플 도시들을 클릭</p>
+            <p>3. 생성된 JSON 형식을 복사해서 missions-data.json에 추가</p>
+            <p><strong>⚠️ 새 구조:</strong> missionaries, churches, startDate, endDate, achievements, activities 필드 제거됨</p>
+            <p><strong>📷 이미지:</strong> images/ 폴더에 "[도시명].jpg" 파일 추가하면 모달에서 표시됩니다</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="cityName">선교지 도시명 또는 국가명:</label>
+            <input type="text" id="cityName" placeholder="예: 파리, 프랑스, 로마, 이탈리아, 카자흐스탄 등" />
+        </div>
+        
+        <button onclick="searchCoordinates()">🔍 좌표 검색</button>
+        <button onclick="generateRandomSample()">🎲 샘플 생성</button>
+        
+        <div class="city-list">
+            <button class="city-btn" onclick="quickSearch('파리')">파리 (프랑스)</button>
+            <button class="city-btn" onclick="quickSearch('로마')">로마 (이탈리아)</button>
+            <button class="city-btn" onclick="quickSearch('카이로')">카이로 (이집트)</button>
+            <button class="city-btn" onclick="quickSearch('방콕')">방콕 (태국)</button>
+            <button class="city-btn" onclick="quickSearch('자카르타')">자카르타 (인도네시아)</button>
+            <button class="city-btn" onclick="quickSearch('뭄바이')">뭄바이 (인도)</button>
+            <button class="city-btn" onclick="quickSearch('타슈켄트')">타슈켄트 (우즈베키스탄)</button>
+            <button class="city-btn" onclick="quickSearch('수라바야')">수라바야 (인도네시아)</button>
+            <button class="city-btn" onclick="quickSearch('모스크바')">모스크바 (러시아)</button>
+            <button class="city-btn" onclick="quickSearch('이스탄불')">이스탄불 (터키)</button>
+            <button class="city-btn" onclick="quickSearch('시카고')">시카고 (미국)</button>
+            <button class="city-btn" onclick="quickSearch('상파울루')">상파울루 (브라질)</button>
+            <button class="city-btn" onclick="quickSearch('케이프타운')">케이프타운 (남아프리카)</button>
+            <button class="city-btn" onclick="quickSearch('두바이')">두바이 (UAE)</button>
+        </div>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>📋 생성된 JSON 데이터:</h3>
+            <div id="coordinates" class="coordinates"></div>
+            <button class="copy-btn" onclick="copyResult()">📎 클립보드에 복사</button>
+        </div>
+    </div>
+
+    <script>
+        // 주요 도시들의 좌표 데이터베이스
+        const cityCoordinates = {
+            // 아시아
+            '서울': { lat: 37.5665, lng: 126.9780, country: '대한민국' },
+            '베이징': { lat: 39.9042, lng: 116.4074, country: '중국' },
+            '도쿄': { lat: 35.6762, lng: 139.6503, country: '일본' },
+            '마닐라': { lat: 14.5995, lng: 120.9842, country: '필리핀' },
+            '방콕': { lat: 13.7563, lng: 100.5018, country: '태국' },
+            '자카르타': { lat: -6.2088, lng: 106.8456, country: '인도네시아' },
+            '타슈켄트': { lat: 41.2995, lng: 69.2401, country: '우즈베키스탄' },
+            '모스크바': { lat: 55.7558, lng: 37.6173, country: '러시아' },
+            '앙카라': { lat: 39.9334, lng: 32.8597, country: '터키' },
+            '카이로': { lat: 30.0444, lng: 31.2357, country: '이집트' },
+            
+            // 중앙아시아
+            '누르술탄': { lat: 51.1694, lng: 71.4491, country: '카자흐스탄' },
+            '비슈케크': { lat: 42.8746, lng: 74.5698, country: '키르기스스탄' },
+            '두샨베': { lat: 38.5598, lng: 68.7870, country: '타지키스탄' },
+            '아슈하바트': { lat: 37.9601, lng: 58.3261, country: '투르크메니스탄' },
+            '카불': { lat: 34.5553, lng: 69.2075, country: '아프가니스탄' },
+            
+            // 서아시아
+            '테헤란': { lat: 35.6892, lng: 51.3890, country: '이란' },
+            '바그다드': { lat: 33.3152, lng: 44.3661, country: '이라크' },
+            '리야드': { lat: 24.7136, lng: 46.6753, country: '사우디아라비아' },
+            '아부다비': { lat: 24.4539, lng: 54.3773, country: '아랍에미레이트' },
+            '이슬라마바드': { lat: 33.7294, lng: 73.0931, country: '파키스탄' },
+            '무스카트': { lat: 23.5880, lng: 58.3829, country: '오만' },
+            '사나': { lat: 15.3694, lng: 44.1910, country: '예멘' },
+            '트빌리시': { lat: 41.7151, lng: 44.8271, country: '조지아' },
+            '바쿠': { lat: 40.4093, lng: 49.8671, country: '아제르바이잔' },
+            '예레반': { lat: 40.1792, lng: 44.4991, country: '아르메니아' },
+            '다마스쿠스': { lat: 33.5138, lng: 36.2765, country: '시리아' },
+            '베이루트': { lat: 33.8938, lng: 35.5018, country: '레바논' },
+            '암만': { lat: 31.9454, lng: 35.9284, country: '요르단' },
+            '예루살렘': { lat: 31.7683, lng: 35.2137, country: '이스라엘' },
+            
+            // 남아시아
+            '뉴델리': { lat: 28.6139, lng: 77.2090, country: '인도' },
+            '콜롬보': { lat: 6.9271, lng: 79.8612, country: '스리랑카' },
+            '카트만두': { lat: 27.7172, lng: 85.3240, country: '네팔' },
+            '팀푸': { lat: 27.4728, lng: 89.6393, country: '부탄' },
+            '우루무치': { lat: 43.8256, lng: 87.6168, country: '중국' },
+            '다카': { lat: 23.8103, lng: 90.4125, country: '방글라데시' },
+            
+            // 동남아시아
+            '쿠알라룸푸르': { lat: 3.1390, lng: 101.6869, country: '말레이시아' },
+            
+            // 유럽
+            '런던': { lat: 51.5074, lng: -0.1278, country: '영국' },
+            '파리': { lat: 48.8566, lng: 2.3522, country: '프랑스' },
+            '베를린': { lat: 52.5200, lng: 13.4050, country: '독일' },
+            '로마': { lat: 41.9028, lng: 12.4964, country: '이탈리아' },
+            '마드리드': { lat: 40.4168, lng: -3.7038, country: '스페인' },
+            '암스테르담': { lat: 52.3676, lng: 4.9041, country: '네덜란드' },
+            '바르셀로나': { lat: 41.3851, lng: 2.1734, country: '스페인' },
+            
+            // 아프리카
+            '나이로비': { lat: -1.2921, lng: 36.8219, country: '케냐' },
+            '라고스': { lat: 6.5244, lng: 3.3792, country: '나이지리아' },
+            '아크라': { lat: 5.6037, lng: -0.1870, country: '가나' },
+            '케이프타운': { lat: -33.9249, lng: 18.4241, country: '남아프리카' },
+            '트리폴리': { lat: 32.8872, lng: 13.1913, country: '리비아' },
+            '튀니스': { lat: 36.8065, lng: 10.1815, country: '튀니지' },
+            '알제': { lat: 36.7528, lng: 3.0420, country: '알제리' },
+            '라바트': { lat: 34.0209, lng: -6.8417, country: '모로코' },
+            '엘아이운': { lat: 27.1536, lng: -13.2033, country: '서사하라' },
+            '누악쇼트': { lat: 18.0735, lng: -15.9582, country: '모리타니' },
+            '바마코': { lat: 12.6392, lng: -8.0029, country: '말리' },
+            '니아메': { lat: 13.5116, lng: 2.1254, country: '니제르' },
+            '은자메나': { lat: 12.1348, lng: 15.0557, country: '차드' },
+            '하르툼': { lat: 15.5007, lng: 32.5599, country: '수단' },
+            '아스마라': { lat: 15.3229, lng: 38.9251, country: '에리트레아' },
+            '지부티': { lat: 11.8251, lng: 42.5903, country: '지부티' },
+            '모가디슈': { lat: 2.0469, lng: 45.3182, country: '소말리아' },
+            
+            // 북미
+            '뉴욕': { lat: 40.7128, lng: -74.0060, country: '미국' },
+            '토론토': { lat: 43.6532, lng: -79.3832, country: '캐나다' },
+            '시카고': { lat: 41.8781, lng: -87.6298, country: '미국' },
+            '로스앤젤레스': { lat: 34.0522, lng: -118.2437, country: '미국' },
+            '멕시코시티': { lat: 19.4326, lng: -99.1332, country: '멕시코' },
+            
+            // 남미
+            '상파울루': { lat: -23.5505, lng: -46.6333, country: '브라질' },
+            '부에노스아이레스': { lat: -34.6037, lng: -58.3816, country: '아르헨티나' },
+            '리마': { lat: -12.0464, lng: -77.0428, country: '페루' },
+            '산티아고': { lat: -33.4489, lng: -70.6693, country: '칠레' },
+            
+            // 오세아니아
+            '시드니': { lat: -33.8688, lng: 151.2093, country: '호주' },
+            '멜버른': { lat: -37.8136, lng: 144.9631, country: '호주' },
+            '오클랜드': { lat: -36.8485, lng: 174.7633, country: '뉴질랜드' }
+        };
+        
+        function quickSearch(cityName) {
+            document.getElementById('cityName').value = cityName;
+            searchCoordinates();
+        }
+        
+        function searchCoordinates() {
+            const searchTerm = document.getElementById('cityName').value.trim();
+            if (!searchTerm) {
+                alert('도시명 또는 국가명을 입력해주세요.');
+                return;
+            }
+            
+            // 먼저 도시명으로 검색
+            let coords = cityCoordinates[searchTerm];
+            let cityName = searchTerm;
+            
+            // 도시명으로 찾지 못하면 국가명으로 검색
+            if (!coords) {
+                for (const [city, data] of Object.entries(cityCoordinates)) {
+                    if (data.country === searchTerm) {
+                        coords = data;
+                        cityName = city;
+                        break;
+                    }
+                }
+            }
+            
+            if (coords) {
+                displayResult(cityName, coords);
+            } else {
+                alert(`"${searchTerm}"의 좌표를 찾을 수 없습니다. 도시명 또는 국가명을 정확히 입력해주세요.`);
+            }
+        }
+        
+        function generateRandomSample() {
+            const cities = Object.keys(cityCoordinates);
+            const randomCity = cities[Math.floor(Math.random() * cities.length)];
+            document.getElementById('cityName').value = randomCity;
+            searchCoordinates();
+        }
+        
+        function displayResult(cityName, coords) {
+            const resultDiv = document.getElementById('result');
+            const coordinatesDiv = document.getElementById('coordinates');
+            
+            // 대륙명 자동 결정
+            const continent = getContinent(coords.country);
+            
+            const jsonData = `{
+  "id": "${cityName.toLowerCase()}",
+  "name": "${cityName}",
+  "country": "${coords.country}",
+  "continent": "${continent}",
+  "coordinates": { "lat": ${coords.lat}, "lng": ${coords.lng} },
+  "status": "future",
+  "description": "${coords.country} ${cityName} 지역 선교 계획",
+  "image": "images/${cityName.toLowerCase()}.jpg"
+}`;
+            
+            coordinatesDiv.textContent = jsonData;
+            resultDiv.style.display = 'block';
+            
+            // 결과로 스크롤
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function getContinent(country) {
+            const continentMap = {
+                // 아시아
+                '대한민국': '아시아', '중국': '아시아', '일본': '아시아', '필리핀': '아시아',
+                '태국': '아시아', '인도네시아': '아시아', '인도': '아시아', 'UAE': '아시아',
+                '베트남': '아시아', '말레이시아': '아시아', '싱가포르': '아시아', '미얀마': '아시아',
+                '우즈베키스탄': '아시아', '터키': '아시아', '카자흐스탄': '아시아', 
+                '키르기스스탄': '아시아', '타지키스탄': '아시아', '투르크메니스탄': '아시아',
+                '아프가니스탄': '아시아', '이란': '아시아', '이라크': '아시아', '사우디아라비아': '아시아',
+                '아랍에미레이트': '아시아', '파키스탄': '아시아', '오만': '아시아', '예멘': '아시아',
+                '조지아': '아시아', '아제르바이잔': '아시아', '아르메니아': '아시아', '시리아': '아시아',
+                '레바논': '아시아', '요르단': '아시아', '이스라엘': '아시아', '스리랑카': '아시아',
+                '네팔': '아시아', '부탄': '아시아', '방글라데시': '아시아', '말레이시아': '아시아',
+                
+                // 유럽
+                '영국': '유럽', '프랑스': '유럽', '독일': '유럽', '이탈리아': '유럽',
+                '스페인': '유럽', '네덜란드': '유럽', '러시아': '유럽', '폴란드': '유럽',
+                
+                // 아프리카
+                '케냐': '아프리카', '이집트': '아프리카', '나이지리아': '아프리카', 
+                '가나': '아프리카', '남아프리카': '아프리카', '에티오피아': '아프리카',
+                '리비아': '아프리카', '튀니지': '아프리카', '알제리': '아프리카', '모로코': '아프리카',
+                '서사하라': '아프리카', '모리타니': '아프리카', '말리': '아프리카', '니제르': '아프리카',
+                '차드': '아프리카', '수단': '아프리카', '에리트레아': '아프리카', '지부티': '아프리카',
+                '소말리아': '아프리카',
+                
+                // 북미
+                '미국': '북미', '캐나다': '북미', '멕시코': '북미',
+                
+                // 남미
+                '브라질': '남미', '아르헨티나': '남미', '페루': '남미', '칠레': '남미',
+                '콜롬비아': '남미', '베네수엘라': '남미',
+                
+                // 오세아니아
+                '호주': '오세아니아', '뉴질랜드': '오세아니아'
+            };
+            
+            return continentMap[country] || '기타';
+        }
+        
+        function copyResult() {
+            const coordinates = document.getElementById('coordinates').textContent;
+            navigator.clipboard.writeText(coordinates).then(() => {
+                alert('클립보드에 복사되었습니다! JSON 파일에 붙여넣기 하세요.');
+            }).catch(() => {
+                alert('복사에 실패했습니다. 수동으로 복사해주세요.');
+            });
+        }
+    </script>
+</body>
+</html>

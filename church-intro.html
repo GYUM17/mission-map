@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 소개 - 사랑열매교회</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00E676, #FF6D00, #FF1744);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #555;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #00E676;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .schedule {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-time {
+            font-size: 1.1rem;
+            color: #00E676;
+            font-weight: bold;
+        }
+
+        .schedule-service {
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .schedule-day {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .container {
+                padding: 140px 20px 40px;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .card {
+                padding: 30px;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .stat {
+                padding: 20px 15px;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .schedule-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">사랑열매교회</div>
+        <nav class="nav">
+            <a href="mission_map_simple.html">선교 현황</a>
+            <a href="church-intro.html" class="active">교회 소개</a>
+            <a href="mission-stories.html">선교 이야기</a>
+            <a href="donation.html">후원하기</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>사랑열매교회</h1>
+            <p>하나님의 사랑으로 세상을 변화시키며, 복음을 전하는 교회입니다. 지역사회와 세계 선교를 통해 하나님 나라를 확장해가고 있습니다.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">교회 현황</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">1,200</div>
+                    <div class="stat-label">교인 수</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">45</div>
+                    <div class="stat-label">선교 국가</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">현재 선교지</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">선교 역사</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">교회 비전</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>🙏 예배하는 공동체</h3>
+                    <p>하나님을 중심으로 한 진정한 예배를 통해 하나님과 깊이 교제하며, 성령 충만한 예배 공동체를 이루어갑니다.</p>
+                </div>
+                <div class="card">
+                    <h3>📖 말씀으로 성장하는 공동체</h3>
+                    <p>하나님의 말씀을 통해 신앙이 성장하고, 성경적 가치관으로 살아가는 성숙한 그리스도인이 되어갑니다.</p>
+                </div>
+                <div class="card">
+                    <h3>🤝 사랑으로 섬기는 공동체</h3>
+                    <p>서로 사랑하고 섬기며, 지역사회와 이웃을 향한 하나님의 사랑을 실천하는 공동체입니다.</p>
+                </div>
+                <div class="card">
+                    <h3>🌍 선교하는 공동체</h3>
+                    <p>온 세상에 복음을 전하며, 하나님 나라 확장을 위해 헌신하는 선교 중심의 교회입니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">목회진 소개</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>담임목사 김성훈</h3>
+                    <p>하나님의 부르심으로 20년간 목회사역을 감당하며, 특히 선교 사역에 깊은 관심과 열정을 가지고 교회를 이끌고 있습니다. 성경신학대학원 목회학 석사를 졸업했습니다.</p>
+                </div>
+                <div class="card">
+                    <h3>선교목사 이은희</h3>
+                    <p>15년간 해외 선교사로 사역한 경험을 바탕으로 교회의 선교 사역을 담당하고 있습니다. 현재 23개국 선교지를 총괄하며 선교사들을 지원하고 있습니다.</p>
+                </div>
+                <div class="card">
+                    <h3>교육목사 박요한</h3>
+                    <p>다음 세대를 향한 하나님의 비전으로 유아부부터 청년부까지의 교육 사역을 담당하고 있습니다. 교육학 박사 학위를 가지고 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">예배 시간</h2>
+            <div class="schedule">
+                <div class="schedule-item">
+                    <div>
+                        <div class="schedule-service">주일 1부 예배</div>
+                        <div class="schedule-day">매주 일요일</div>
+                    </div>
+                    <div class="schedule-time">오전 9:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div>
+                        <div class="schedule-service">주일 2부 예배</div>
+                        <div class="schedule-day">매주 일요일</div>
+                    </div>
+                    <div class="schedule-time">오전 11:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div>
+                        <div class="schedule-service">주일 3부 예배 (청년)</div>
+                        <div class="schedule-day">매주 일요일</div>
+                    </div>
+                    <div class="schedule-time">오후 2:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div>
+                        <div class="schedule-service">수요 기도회</div>
+                        <div class="schedule-day">매주 수요일</div>
+                    </div>
+                    <div class="schedule-time">오후 7:30</div>
+                </div>
+                <div class="schedule-item">
+                    <div>
+                        <div class="schedule-service">새벽 기도회</div>
+                        <div class="schedule-day">월~토</div>
+                    </div>
+                    <div class="schedule-time">오전 5:30</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

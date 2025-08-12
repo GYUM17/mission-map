@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선교 이야기 - 사랑열매교회</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .stories {
+            display: grid;
+            gap: 60px;
+        }
+
+        .story {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .story:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: #555;
+        }
+
+        .story-header {
+            padding: 40px;
+            border-bottom: 1px solid #333;
+        }
+
+        .story-location {
+            display: inline-block;
+            background: linear-gradient(135deg, #00E676 0%, #4CAF50 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .story-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .story-meta {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .story-content {
+            padding: 40px;
+        }
+
+        .story-text {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .story-impact {
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .story-impact h4 {
+            color: #00E676;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .story-impact p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #555;
+        }
+
+        .gallery-placeholder {
+            height: 200px;
+            background: linear-gradient(45deg, #333 0%, #444 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 3rem;
+        }
+
+        .gallery-content {
+            padding: 25px;
+        }
+
+        .gallery-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .gallery-description {
+            color: #999;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .testimonial {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+            border-color: #555;
+        }
+
+        .testimonial::before {
+            content: '"';
+            font-size: 4rem;
+            color: #00E676;
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            margin-top: 30px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00E676, #4CAF50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .container {
+                padding: 140px 20px 40px;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .story-header, .story-content {
+                padding: 30px 20px;
+            }
+            
+            .story-title {
+                font-size: 1.5rem;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">사랑열매교회</div>
+        <nav class="nav">
+            <a href="mission_map_simple.html">선교 현황</a>
+            <a href="church-intro.html">교회 소개</a>
+            <a href="mission-stories.html" class="active">선교 이야기</a>
+            <a href="donation.html">후원하기</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>선교 이야기</h1>
+            <p>하나님의 사랑으로 세상을 변화시키는 선교 현장의 생생한 이야기들을 나눕니다. 각 선교지에서 일어나는 하나님의 역사를 함께 나누어요.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">선교 현장 이야기</h2>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-header">
+                        <div class="story-location">필리핀 마닐라</div>
+                        <h3 class="story-title">빈민가에 피어난 희망의 교회</h3>
+                        <div class="story-meta">2023년 12월 • 이은희 선교사</div>
+                    </div>
+                    <div class="story-content">
+                        <p class="story-text">
+                            마닐라 빈민가 중심부에 작은 교회가 세워졌습니다. 처음에는 단 5명의 아이들과 시작한 주일학교가 이제는 80여 명의 아이들이 모이는 
+                            활기찬 공동체가 되었습니다. 매주 화요일과 목요일에는 무료 급식을 제공하며, 아이들에게 기초 교육도 함께 진행하고 있습니다.
+                        </p>
+                        <div class="story-impact">
+                            <h4>🌟 선교 성과</h4>
+                            <p>80명의 아이들이 정기적으로 교회에 출석하며, 12가정이 신앙을 받아들였습니다. 지역 주민들의 교회에 대한 인식이 크게 개선되었습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story">
+                    <div class="story-header">
+                        <div class="story-location">케냐 나이로비</div>
+                        <h3 class="story-title">의료 선교로 열린 마음의 문</h3>
+                        <div class="story-meta">2023년 10월 • 박요한 선교사</div>
+                    </div>
+                    <div class="story-content">
+                        <p class="story-text">
+                            나이로비 외곽 지역에서 무료 의료 봉사를 시작한 지 2년이 되었습니다. 처음에는 경계하던 주민들이 이제는 
+                            먼저 교회를 찾아오며, 의료 서비스와 함께 복음도 자연스럽게 전해지고 있습니다. 특히 산모들과 어린이들을 위한 
+                            건강 프로그램이 큰 호응을 얻고 있습니다.
+                        </p>
+                        <div class="story-impact">
+                            <h4>🌟 선교 성과</h4>
+                            <p>월 평균 200명의 환자를 치료하며, 45명이 세례를 받았습니다. 지역 보건소와 협력 관계를 구축했습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story">
+                    <div class="story-header">
+                        <div class="story-location">인도네시아 자카르타</div>
+                        <h3 class="story-title">청년들과 함께하는 문화 선교</h3>
+                        <div class="story-meta">2024년 1월 • 김성민 선교사</div>
+                    </div>
+                    <div class="story-content">
+                        <p class="story-text">
+                            자카르타 청년들과 함께 문화 선교 사역을 진행하고 있습니다. K-POP 댄스와 한국어 교실을 통해 
+                            자연스럽게 복음을 전하며, 매주 30여 명의 청년들이 교회 프로그램에 참여하고 있습니다. 
+                            문화적 차이를 뛰어넘어 진정한 소통이 일어나고 있습니다.
+                        </p>
+                        <div class="story-impact">
+                            <h4>🌟 선교 성과</h4>
+                            <p>청년 소그룹 3개가 새로 만들어졌으며, 15명의 청년이 신앙을 고백했습니다. 한국 문화에 대한 관심도 크게 높아졌습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">선교지 사진 갤러리</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">📷</div>
+                    <div class="gallery-content">
+                        <h4 class="gallery-title">마닐라 주일학교</h4>
+                        <p class="gallery-description">아이들의 밝은 웃음소리가 가득한 마닐라 빈민가 교회의 주일학교 모습입니다.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">🏥</div>
+                    <div class="gallery-content">
+                        <h4 class="gallery-title">나이로비 의료 봉사</h4>
+                        <p class="gallery-description">케냐 나이로비에서 진행되는 무료 의료 봉사 활동 현장의 모습입니다.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">🎭</div>
+                    <div class="gallery-content">
+                        <h4 class="gallery-title">자카르타 문화 선교</h4>
+                        <p class="gallery-description">인도네시아 청년들과 함께하는 K-POP 댄스와 문화 교류 프로그램입니다.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">⛪</div>
+                    <div class="gallery-content">
+                        <h4 class="gallery-title">베이징 교회 개척</h4>
+                        <p class="gallery-description">중국 베이징에 새로 세워진 교회에서 드려지는 첫 예배의 감동적인 순간입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">선교사 간증</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p class="testimonial-text">
+                        하나님께서 이 땅에 보내주신 목적을 날마다 새롭게 깨달아가고 있습니다. 
+                        아이들의 순수한 웃음 속에서 하나님의 사랑을 확인하며, 
+                        이들과 함께하는 매 순간이 축복입니다.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">이</div>
+                        <div class="author-info">
+                            <h4>이은희 선교사</h4>
+                            <p>필리핀 마닐라 • 5년차</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">
+                        의료 선교를 통해 몸과 영혼을 모두 치유하는 하나님의 역사를 목격하고 있습니다. 
+                        언어와 문화의 장벽을 넘어 사랑으로 소통할 때 
+                        진정한 변화가 일어남을 경험합니다.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">박</div>
+                        <div class="author-info">
+                            <h4>박요한 선교사</h4>
+                            <p>케냐 나이로비 • 3년차</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">
+                        젊은 세대들과 함께하며 문화를 통해 복음을 전하는 새로운 방법을 배우고 있습니다. 
+                        그들의 열정과 순수함 속에서 오히려 제가 더 많은 것을 
+                        배워가고 있습니다.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">김</div>
+                        <div class="author-info">
+                            <h4>김성민 선교사</h4>
+                            <p>인도네시아 자카르타 • 2년차</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

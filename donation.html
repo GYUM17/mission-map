@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>후원하기 - 사랑열매교회</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .donation-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .donation-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .donation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00E676, #FF6D00);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .donation-card:hover {
+            transform: translateY(-10px);
+            border-color: #00E676;
+            box-shadow: 0 25px 50px rgba(0, 230, 118, 0.1);
+        }
+
+        .donation-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .card-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .card-amount {
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .amount-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .amount-value {
+            font-size: 1.3rem;
+            color: #00E676;
+            font-weight: bold;
+        }
+
+        .donate-btn {
+            background: linear-gradient(135deg, #00E676 0%, #4CAF50 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .donate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 230, 118, 0.3);
+        }
+
+        .account-info {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .account-title {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .account-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .account-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .account-bank {
+            font-size: 1.2rem;
+            color: #00E676;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .account-number {
+            font-size: 1.1rem;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .account-name {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .copy-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #555;
+        }
+
+        .usage-report {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .usage-title {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .usage-items {
+            display: grid;
+            gap: 20px;
+        }
+
+        .usage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .usage-category {
+            color: white;
+            font-weight: 500;
+        }
+
+        .usage-percentage {
+            color: #00E676;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .usage-bar {
+            flex: 1;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00E676, #4CAF50);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        .contact-info {
+            background: rgba(0, 230, 118, 0.05);
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .contact-info h4 {
+            color: #00E676;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-info p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .container {
+                padding: 140px 20px 40px;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .donation-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .donation-card {
+                padding: 30px;
+            }
+            
+            .account-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .usage-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .usage-bar {
+                width: 100%;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">사랑열매교회</div>
+        <nav class="nav">
+            <a href="mission_map_simple.html">선교 현황</a>
+            <a href="church-intro.html">교회 소개</a>
+            <a href="mission-stories.html">선교 이야기</a>
+            <a href="donation.html" class="active">후원하기</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>후원하기</h1>
+            <p>하나님 나라 확장과 복음 전파를 위한 선교 사역에 함께 참여해주세요. 여러분의 소중한 후원이 세상을 변화시키는 하나님의 역사에 쓰여집니다.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">후원 방법</h2>
+            <div class="donation-options">
+                <div class="donation-card">
+                    <span class="card-icon">🔄</span>
+                    <h3 class="card-title">정기 후원</h3>
+                    <p class="card-description">매월 자동 이체를 통해 지속적으로 선교 사역을 후원할 수 있습니다. 안정적인 후원으로 장기적인 선교 계획을 세울 수 있습니다.</p>
+                    <div class="card-amount">
+                        <div class="amount-label">권장 금액</div>
+                        <div class="amount-value">월 50,000원</div>
+                    </div>
+                    <button class="donate-btn" onclick="showAccount()">정기 후원하기</button>
+                </div>
+
+                <div class="donation-card">
+                    <span class="card-icon">💝</span>
+                    <h3 class="card-title">일시 후원</h3>
+                    <p class="card-description">필요에 따라 원하는 금액으로 후원하실 수 있습니다. 긴급한 선교 상황이나 특별한 프로젝트를 위한 후원에 참여해주세요.</p>
+                    <div class="card-amount">
+                        <div class="amount-label">자유 금액</div>
+                        <div class="amount-value">마음의 정성</div>
+                    </div>
+                    <button class="donate-btn" onclick="showAccount()">일시 후원하기</button>
+                </div>
+
+                <div class="donation-card">
+                    <span class="card-icon">🎯</span>
+                    <h3 class="card-title">선교지 지정 후원</h3>
+                    <p class="card-description">특정 선교지나 선교사를 지정하여 후원할 수 있습니다. 관심 있는 지역의 선교 사역을 직접적으로 지원하실 수 있습니다.</p>
+                    <div class="card-amount">
+                        <div class="amount-label">선택 가능</div>
+                        <div class="amount-value">23개 선교지</div>
+                    </div>
+                    <button class="donate-btn" onclick="contactUs()">문의하기</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="account-info">
+                <h3 class="account-title">후원 계좌 안내</h3>
+                <div class="account-details">
+                    <div class="account-item">
+                        <div class="account-bank">국민은행</div>
+                        <div class="account-number">123456-78-901234</div>
+                        <div class="account-name">사랑열매교회</div>
+                        <button class="copy-btn" onclick="copyAccount('123456-78-901234')">복사하기</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-bank">신한은행</div>
+                        <div class="account-number">567890-12-345678</div>
+                        <div class="account-name">사랑열매교회</div>
+                        <button class="copy-btn" onclick="copyAccount('567890-12-345678')">복사하기</button>
+                    </div>
+                    <div class="account-item">
+                        <div class="account-bank">우리은행</div>
+                        <div class="account-number">987654-32-109876</div>
+                        <div class="account-name">사랑열매교회</div>
+                        <button class="copy-btn" onclick="copyAccount('987654-32-109876')">복사하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="usage-report">
+                <h3 class="usage-title">후원금 사용 내역 (2024년)</h3>
+                <div class="usage-items">
+                    <div class="usage-item">
+                        <span class="usage-category">선교사 생활비 지원</span>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 40%"></div>
+                        </div>
+                        <span class="usage-percentage">40%</span>
+                    </div>
+                    <div class="usage-item">
+                        <span class="usage-category">교회 개척 및 건축</span>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 25%"></div>
+                        </div>
+                        <span class="usage-percentage">25%</span>
+                    </div>
+                    <div class="usage-item">
+                        <span class="usage-category">의료/교육 사업</span>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 20%"></div>
+                        </div>
+                        <span class="usage-percentage">20%</span>
+                    </div>
+                    <div class="usage-item">
+                        <span class="usage-category">긴급 구호 활동</span>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 10%"></div>
+                        </div>
+                        <span class="usage-percentage">10%</span>
+                    </div>
+                    <div class="usage-item">
+                        <span class="usage-category">운영비 및 기타</span>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 5%"></div>
+                        </div>
+                        <span class="usage-percentage">5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-info">
+            <h4>후원 문의</h4>
+            <p>후원에 대한 궁금한 사항이나 영수증 발급, 정기후원 신청은<br>
+            교회 사무실(02-1234-5678) 또는 선교부(02-1234-5679)로 연락주세요.</p>
+        </div>
+    </div>
+
+    <script>
+        function showAccount() {
+            alert('후원을 원하시는 계좌로 입금 후, 교회 사무실로 연락주세요.\n정기 후원의 경우 자동 이체 신청서를 작성해드립니다.');
+        }
+
+        function contactUs() {
+            alert('선교지 지정 후원을 원하시면 교회 사무실(02-1234-5678)로 연락주세요.\n상담을 통해 맞춤형 후원 방법을 안내해드립니다.');
+        }
+
+        function copyAccount(accountNumber) {
+            navigator.clipboard.writeText(accountNumber).then(function() {
+                alert('계좌번호가 복사되었습니다: ' + accountNumber);
+            }).catch(function() {
+                alert('계좌번호: ' + accountNumber + '\n(수동으로 복사해주세요)');
+            });
+        }
+
+        // 사용내역 바 애니메이션
+        window.addEventListener('load', function() {
+            const fills = document.querySelectorAll('.usage-fill');
+            fills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+{
+  "missions": [{
+      "id": "서울",
+      "name": "부천",
+      "country": "대한민국",
+      "continent": "아시아",
+      "coordinates": { "lat": 37.5665, "lng": 126.978 },
+      "status": "completed",
+      "description": "대한민국 서울 지역 선교 계획",
+      "image": "images/서울.jpg"
+    },
+    {
+      "id": "manila",
+      "name": "마닐라",
+      "country": "필리핀",
+      "continent": "아시아",
+      "coordinates": { "lat": 14.5995, "lng": 120.9842 },
+      "status": "planned",
+      "description": "2026 필리핀 마닐라 지역 단기선교"
+    },
+    {
+      "id": "jakarta",
+      "name": "자카르타",
+      "country": "인도네시아",
+      "continent": "아시아",
+      "coordinates": { "lat": -6.2088, "lng": 106.8456 },
+      "status": "planned",
+      "description": "2023, 2025 인도네시아 자카르타 단기선교"
+    },
+    {
+      "id": "누르술탄",
+      "name": "",
+      "country": "카자흐스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 48.8603, "lng": 68.7815 },
+      "status": "future",
+      "description": "카자흐스탄 누르술탄 지역 선교 계획",
+      "image": "images/누르술탄.jpg"
+    },
+    {
+      "id": "비슈케크",
+      "name": "",
+      "country": "키르기스스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 42.8746, "lng": 74.5698 },
+      "status": "future",
+      "description": "키르기스스탄 비슈케크 지역 선교 계획",
+      "image": "images/비슈케크.jpg"
+    },
+    {
+      "id": "두샨베",
+      "name": "",
+      "country": "타지키스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 38.5598, "lng": 68.787 },
+      "status": "future",
+      "description": "타지키스탄 두샨베 지역 선교 계획",
+      "image": "images/두샨베.jpg"
+    },
+    {
+      "id": "아슈하바트",
+      "name": "",
+      "country": "투르크메니스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 37.9601, "lng": 58.3261 },
+      "status": "future",
+      "description": "투르크메니스탄 아슈하바트 지역 선교 계획",
+      "image": "images/아슈하바트.jpg"
+    },
+    {
+      "id": "카불",
+      "name": "",
+      "country": "아프가니스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 34.5553, "lng": 69.2075 },
+      "status": "future",
+      "description": "아프가니스탄 카불 지역 선교 계획",
+      "image": "images/카불.jpg"
+    },
+    {
+      "id": "테헤란",
+      "name": "",
+      "country": "이란",
+      "continent": "아시아",
+      "coordinates": { "lat": 35.6892, "lng": 51.389 },
+      "status": "future",
+      "description": "이란 테헤란 지역 선교 계획",
+      "image": "images/테헤란.jpg"
+    },
+    {
+      "id": "바그다드",
+      "name": "",
+      "country": "이라크",
+      "continent": "아시아",
+      "coordinates": { "lat": 33.3152, "lng": 44.3661 },
+      "status": "future",
+      "description": "이라크 바그다드 지역 선교 계획",
+      "image": "images/바그다드.jpg"
+    },
+    {
+      "id": "리야드",
+      "name": "",
+      "country": "사우디아라비아",
+      "continent": "아시아",
+      "coordinates": { "lat": 24.7136, "lng": 46.6753 },
+      "status": "future",
+      "description": "사우디아라비아 리야드 지역 선교 계획",
+      "image": "images/리야드.jpg"
+    },
+    {
+      "id": "아부다비",
+      "name": "",
+      "country": "아랍에미레이트",
+      "continent": "아시아",
+      "coordinates": { "lat": 24.4539, "lng": 54.3773 },
+      "status": "future",
+      "description": "아랍에미레이트 아부다비 지역 선교 계획",
+      "image": "images/아부다비.jpg"
+    },
+    {
+      "id": "이슬라마바드",
+      "name": "",
+      "country": "파키스탄",
+      "continent": "아시아",
+      "coordinates": { "lat": 33.7294, "lng": 73.0931 },
+      "status": "future",
+      "description": "파키스탄 이슬라마바드 지역 선교 계획",
+      "image": "images/이슬라마바드.jpg"
+    },
+    {
+      "id": "뉴델리",
+      "name": "",
+      "country": "인도",
+      "continent": "아시아",
+      "coordinates": { "lat": 28.6139, "lng": 77.2090 },
+      "status": "future",
+      "description": "인도 뉴델리 지역 선교 계획",
+      "image": "images/뉴델리.jpg"
+    }
+  ],
+  "statistics": {
+    "totalCountries": 45,
+    "completedMissions": 9,
+    "ongoingMissions": 4,
+    "plannedMissions": 12,
+    "totalMissionaries": 66,
+    "totalChurches": 64,
+    "missionYears": 20
+  },
+  "continents": {
+    "아시아": {
+      "completed": 4,
+      "planned": 1,
+      "future": 2
+    },
+    "유럽": {
+      "completed": 2,
+      "planned": 1,
+      "future": 2
+    },
+    "아프리카": {
+      "completed": 1,
+      "planned": 0,
+      "future": 2
+    },
+    "북미": {
+      "completed": 1,
+      "planned": 1,
+      "future": 1
+    },
+    "남미": {
+      "completed": 0,
+      "planned": 0,
+      "future": 3
+    },
+    "오세아니아": {
+      "completed": 1,
+      "planned": 0,
+      "future": 1
+    }
+  }
+}
