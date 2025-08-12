@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>교회 소개 - 사랑열매교회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -13,9 +14,9 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: white;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: white;
+            color: #374151;
             overflow-x: hidden;
             cursor: default;
         }
@@ -30,15 +31,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .logo {
             font-size: 1.2rem;
             font-weight: bold;
-            color: white;
+            color: #1f2937;
         }
 
         .nav {
@@ -47,21 +48,21 @@
         }
 
         .nav a {
-            color: #999;
+            color: #6b7280;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .nav a:hover, .nav a.active {
-            color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .nav a:hover, .nav a.active {
-            color: white;
+            color: #1e40af;
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -73,7 +74,9 @@
         .hero {
             text-align: center;
             margin-bottom: 80px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             padding: 60px 40px;
         }
@@ -82,15 +85,12 @@
             font-size: 3.5rem;
             font-weight: 300;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1f2937;
         }
 
         .hero p {
             font-size: 1.3rem;
-            color: #999;
+            color: #6b7280;
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
@@ -105,7 +105,7 @@
             font-weight: 300;
             margin-bottom: 40px;
             text-align: center;
-            color: white;
+            color: #1f2937;
         }
 
         .cards {
@@ -116,8 +116,9 @@
         }
 
         .card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            border: 1px solid #333;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 16px;
             padding: 40px;
             transition: all 0.3s ease;
@@ -132,15 +133,15 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #00E676, #FF6D00, #FF1744);
+            background: linear-gradient(90deg, #3b82f6, #1e40af, #1d4ed8);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-8px);
-            border-color: #555;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         .card:hover::before {
@@ -150,11 +151,11 @@
         .card h3 {
             font-size: 1.5rem;
             margin-bottom: 20px;
-            color: white;
+            color: #1f2937;
         }
 
         .card p {
-            color: #ccc;
+            color: #6b7280;
             line-height: 1.6;
         }
 
@@ -167,8 +168,9 @@
 
         .stat {
             text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 30px 20px;
         }
@@ -176,22 +178,23 @@
         .stat-number {
             font-size: 3rem;
             font-weight: 300;
-            color: #00E676;
+            color: #3b82f6;
             margin-bottom: 10px;
         }
 
         .stat-label {
             font-size: 0.9rem;
-            color: #999;
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .schedule {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
             border-radius: 16px;
             padding: 40px;
-            border: 1px solid #333;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .schedule-item {
@@ -199,7 +202,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .schedule-item:last-child {
@@ -208,18 +211,18 @@
 
         .schedule-time {
             font-size: 1.1rem;
-            color: #00E676;
+            color: #3b82f6;
             font-weight: bold;
         }
 
         .schedule-service {
             font-size: 1.1rem;
-            color: white;
+            color: #1f2937;
         }
 
         .schedule-day {
             font-size: 0.9rem;
-            color: #999;
+            color: #6b7280;
         }
 
         @media (max-width: 768px) {

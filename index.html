@@ -118,7 +118,7 @@
             position: absolute;
             width: 24px;
             height: 24px;
-            background: inherit;
+            background: #3b82f6; /* 기본 색상 */
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -151,16 +151,16 @@
             transform: scale(1.1) translateY(0px) translateZ(0);
         }
         
-        /* 핀 색상별 스타일 */
-        .mission-pin.completed {
+        /* 핀 색상별 스타일 - ::before에만 적용 */
+        .mission-pin.completed::before {
             background: #1e40af;
         }
         
-        .mission-pin.planned {
+        .mission-pin.planned::before {
             background: #3b82f6;
         }
         
-        .mission-pin.future {
+        .mission-pin.future::before {
             background: #60a5fa;
         }
         
@@ -1535,56 +1535,74 @@
 
         // 선교 위치를 SVG circle로 렌더링 (지도와 완전 동기화)
         function renderMissionLocations() {
-            console.log("=== 핀 렌더링 시작 ===");
+            console.log("=== SVG 핀 렌더링 시작 ===");
             
             // 기존 핀들 제거
-            document.querySelectorAll('.mission-pin').forEach(pin => pin.remove());
+            mapGroup.selectAll('.mission-pin-group').remove();
             
             if (!missionsData || !missionsData.missions) {
                 console.warn("선교 데이터가 없습니다");
                 return;
             }
             
-            // 지도 컨테이너 찾기
-            const mapContainer = document.querySelector('.world-map');
-            
             missionsData.missions.forEach(mission => {
-                // HTML 핀 요소 생성
-                const pin = document.createElement('div');
-                pin.className = `mission-pin ${mission.status}`;
-                pin.dataset.status = mission.status;
-                pin.dataset.missionId = mission.id;
-                pin.dataset.country = mission.country;
-                pin.style.opacity = '0';
-                pin.style.transform = 'translateZ(0)';
+                // 좌표 데이터 추출
+                const coordinates = mission.coordinates || {};
+                const lat = coordinates.lat;
+                const lng = coordinates.lng;
+                const name = mission.name || mission.id || '알 수 없음';
                 
-                // 이벤트 리스너 추가
-                pin.addEventListener('click', () => {
-                    showMissionDetails(mission);
-                });
-                
-                pin.addEventListener('mouseenter', (event) => {
-                    showTooltip(event, mission);
-                });
-                
-                pin.addEventListener('mouseleave', () => {
-                    hideTooltip();
-                });
-                
-                pin.addEventListener('mousemove', (event) => {
-                    updateTooltipPosition(event);
-                });
-                
-                // 지도에 추가
-                mapContainer.appendChild(pin);
+                // 유효한 좌표 확인
+                if (lat && lng && lat !== 0 && lng !== 0) {
+                    try {
+                        // D3 projection으로 좌표 변환
+                        const projectedCoords = projection([lng, lat]);
+                        
+                        if (projectedCoords && !isNaN(projectedCoords[0]) && !isNaN(projectedCoords[1])) {
+                            // SVG 그룹 생성 (지도와 함께 확대/축소됨)
+                            const pinGroup = mapGroup.append('g')
+                                .attr('class', 'mission-pin-group')
+                                .attr('transform', `translate(${projectedCoords[0]}, ${projectedCoords[1]})`);
+                            
+                            // foreignObject로 HTML 핀 삽입
+                            const foreignObject = pinGroup.append('foreignObject')
+                                .attr('x', -12) // 핀 중앙 정렬
+                                .attr('y', -24) // 핀 하단이 정확한 위치
+                                .attr('width', 24)
+                                .attr('height', 24);
+                            
+                            // HTML div 생성
+                            const pinDiv = foreignObject.append('xhtml:div')
+                                .attr('class', `mission-pin ${mission.status}`)
+                                .style('width', '24px')
+                                .style('height', '24px')
+                                .style('cursor', 'pointer')
+                                .on('click', () => {
+                                    showMissionDetails(mission);
+                                })
+                                .on('mouseenter', function(event) {
+                                    showTooltip(event, mission);
+                                })
+                                .on('mouseleave', () => {
+                                    hideTooltip();
+                                })
+                                .on('mousemove', function(event) {
+                                    updateTooltipPosition(event);
+                                });
+                                
+                            console.log(`✓ ${name}: SVG 핀 생성 완료 (${projectedCoords[0].toFixed(1)}, ${projectedCoords[1].toFixed(1)})`);
+                        } else {
+                            console.warn(`${name}: 좌표 변환 실패`);
+                        }
+                    } catch (error) {
+                        console.warn(`${name} 핀 생성 오류:`, error);
+                    }
+                } else {
+                    console.warn(`${name}: 좌표 없음`);
+                }
             });
             
-            console.log(`${missionsData.missions.length}개 핀 생성 완료`);
-            
-            // 실제 좌표로 핀 위치 설정
-            setTimeout(() => {
-                setPinPositions();
-            }, 100);
+            console.log(`SVG 핀 렌더링 완료`);
         }
         
         // 한국어 ↔ 영어 국가명 매핑 테이블
@@ -1723,26 +1741,34 @@
             console.log(`${positionedCount}개 핀 위치 설정 완료`);
         }
 
-        // 핀들에 대한 필터링 업데이트
+        // SVG 핀들에 대한 필터링 업데이트
         function updateSVGFilter() {
             if (!missionsData) return;
             
-            const pins = document.querySelectorAll('.mission-pin');
+            const pinGroups = mapGroup.selectAll('.mission-pin-group');
             
-            pins.forEach(pin => {
-                const status = pin.dataset.status;
+            pinGroups.each(function() {
+                const group = d3.select(this);
+                const pinDiv = group.select('.mission-pin');
+                const pinClasses = pinDiv.attr('class') || '';
+                
+                // 상태 추출
+                let status = '';
+                if (pinClasses.includes('completed')) status = 'completed';
+                else if (pinClasses.includes('planned')) status = 'planned';  
+                else if (pinClasses.includes('future')) status = 'future';
                 
                 // 필터 조건 검사
                 const shouldShow = currentFilter === 'all' || status === currentFilter;
                 
                 if (shouldShow) {
-                    pin.style.opacity = '1';
-                    pin.style.pointerEvents = 'all';
-                    pin.style.transform = 'scale(1) translateZ(0)';
+                    group.style('opacity', 1)
+                         .style('pointer-events', 'all');
+                    pinDiv.style('transform', 'scale(1)');
                 } else {
-                    pin.style.opacity = '0.3';
-                    pin.style.pointerEvents = 'none';
-                    pin.style.transform = 'scale(0.8) translateZ(0)';
+                    group.style('opacity', 0.3)
+                         .style('pointer-events', 'none');
+                    pinDiv.style('transform', 'scale(0.8)');
                 }
             });
         }

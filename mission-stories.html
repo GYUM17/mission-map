@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>선교 이야기 - 사랑열매교회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -13,9 +14,9 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: white;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: white;
+            color: #374151;
             overflow-x: hidden;
             cursor: default;
         }
@@ -30,15 +31,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .logo {
             font-size: 1.2rem;
             font-weight: bold;
-            color: white;
+            color: #1f2937;
         }
 
         .nav {
@@ -47,14 +48,21 @@
         }
 
         .nav a {
-            color: #999;
+            color: #6b7280;
             text-decoration: none;
             font-size: 0.9rem;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .nav a:hover, .nav a.active {
-            color: white;
+            color: #1e40af;
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -66,7 +74,9 @@
         .hero {
             text-align: center;
             margin-bottom: 80px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             padding: 60px 40px;
         }
@@ -75,15 +85,12 @@
             font-size: 3.5rem;
             font-weight: 300;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1f2937;
         }
 
         .hero p {
             font-size: 1.3rem;
-            color: #999;
+            color: #6b7280;
             max-width: 600px;
             margin: 0 auto;
             line-height: 1.6;
@@ -98,7 +105,7 @@
             font-weight: 300;
             margin-bottom: 40px;
             text-align: center;
-            color: white;
+            color: #1f2937;
         }
 
         .stories {
@@ -107,8 +114,9 @@
         }
 
         .story {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            border: 1px solid #333;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -116,18 +124,18 @@
 
         .story:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: #555;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .story-header {
             padding: 40px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .story-location {
             display: inline-block;
-            background: linear-gradient(135deg, #00E676 0%, #4CAF50 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -142,11 +150,11 @@
             font-size: 2rem;
             font-weight: 300;
             margin-bottom: 15px;
-            color: white;
+            color: #1f2937;
         }
 
         .story-meta {
-            color: #999;
+            color: #6b7280;
             font-size: 0.9rem;
         }
 
@@ -155,22 +163,22 @@
         }
 
         .story-text {
-            color: #ccc;
+            color: #6b7280;
             line-height: 1.8;
             font-size: 1.1rem;
             margin-bottom: 30px;
         }
 
         .story-impact {
-            background: rgba(0, 230, 118, 0.1);
-            border: 1px solid rgba(0, 230, 118, 0.3);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 12px;
             padding: 25px;
             margin-top: 30px;
         }
 
         .story-impact h4 {
-            color: #00E676;
+            color: #3b82f6;
             font-size: 1.2rem;
             margin-bottom: 15px;
             display: flex;
@@ -179,7 +187,7 @@
         }
 
         .story-impact p {
-            color: #ccc;
+            color: #6b7280;
             line-height: 1.6;
         }
 
@@ -191,8 +199,9 @@
         }
 
         .gallery-item {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            border: 1px solid #333;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -201,16 +210,16 @@
 
         .gallery-item:hover {
             transform: translateY(-5px);
-            border-color: #555;
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .gallery-placeholder {
             height: 200px;
-            background: linear-gradient(45deg, #333 0%, #444 100%);
+            background: linear-gradient(45deg, #e5e7eb 0%, #d1d5db 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
+            color: #9ca3af;
             font-size: 3rem;
         }
 
@@ -221,11 +230,11 @@
         .gallery-title {
             font-size: 1.2rem;
             margin-bottom: 10px;
-            color: white;
+            color: #1f2937;
         }
 
         .gallery-description {
-            color: #999;
+            color: #6b7280;
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -237,8 +246,9 @@
         }
 
         .testimonial {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            border: 1px solid #333;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 16px;
             padding: 40px;
             position: relative;
@@ -247,13 +257,13 @@
 
         .testimonial:hover {
             transform: translateY(-5px);
-            border-color: #555;
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .testimonial::before {
             content: '"';
             font-size: 4rem;
-            color: #00E676;
+            color: #3b82f6;
             position: absolute;
             top: 20px;
             left: 30px;
@@ -261,7 +271,7 @@
         }
 
         .testimonial-text {
-            color: #ccc;
+            color: #6b7280;
             line-height: 1.6;
             font-size: 1.1rem;
             margin-bottom: 25px;
@@ -278,7 +288,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #00E676, #4CAF50);
+            background: linear-gradient(45deg, #3b82f6, #1e40af);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -288,13 +298,13 @@
         }
 
         .author-info h4 {
-            color: white;
+            color: #1f2937;
             font-size: 1.1rem;
             margin-bottom: 5px;
         }
 
         .author-info p {
-            color: #999;
+            color: #6b7280;
             font-size: 0.9rem;
         }
 
