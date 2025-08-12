@@ -18,8 +18,8 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: #121212;
-            color: #E0E0E0;
+            background: #0a0a0a;
+            color: white;
             overflow-x: hidden;
             cursor: default;
             line-height: 1.6;
@@ -37,7 +37,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(18, 18, 18, 0.95);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -988,7 +988,7 @@
     <div class="header">
         <div class="logo">사랑열매교회</div>
         <nav class="nav">
-            <a href="mission_map_simple.html" class="active">선교 현황</a>
+            <a href="index.html" class="active">선교 현황</a>
             <a href="church-intro.html">교회 소개</a>
             <a href="mission-stories.html">선교 이야기</a>
             <a href="donation.html">후원하기</a>
@@ -1429,7 +1429,7 @@
         // 선교 데이터 로드
         async function loadMissionsData() {
             try {
-                const response = await fetch('./missions-data.json');
+                const response = await fetch('./data/missions-data.json');
                 const rawData = await response.json();
                 
                 // 데이터 검증 및 정리
@@ -1532,6 +1532,16 @@
             "인도": "India",
             "태국": "Thailand", 
             "인도네시아": "Indonesia",
+            "카자흐스탄": "Kazakhstan",
+            "키르기스스탄": "Kyrgyzstan",
+            "타지키스탄": "Tajikistan",
+            "투르크메니스탄": "Turkmenistan",
+            "아프가니스탄": "Afghanistan",
+            "이란": "Iran",
+            "이라크": "Iraq",
+            "사우디아라비아": "Saudi Arabia",
+            "아랍에미레이트": "United Arab Emirates",
+            "파키스탄": "Pakistan",
             "독일": "Germany",
             "영국": "United Kingdom", 
             "프랑스": "France",
@@ -1818,7 +1828,7 @@
         }
 
         // 지도 먼저 로드, 완료 후 선교 데이터 처리
-        // loadMissionsData();
+        loadMissionsData();
 
         function showAll() {
             currentFilter = 'all';
