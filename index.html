@@ -18,10 +18,13 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: white;
+            background: #121212;
+            color: #E0E0E0;
             overflow-x: hidden;
             cursor: default;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .header {
@@ -29,12 +32,12 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
+            z-index: 1000; /* 헤더 최상위 */
             padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(18, 18, 18, 0.95);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -45,71 +48,16 @@
         }
 
         .nav a {
-            color: #999;
+            color: #9E9E9E;
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.3s ease;
         }
 
         .nav a:hover, .nav a.active {
-            color: white;
+            color: #E0E0E0;
         }
 
-        .search-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        #search-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 8px 35px 8px 16px;
-            color: white;
-            font-size: 0.9rem;
-            width: 200px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        #search-input:focus {
-            border-color: #666;
-            background: rgba(255, 255, 255, 0.15);
-            width: 250px;
-        }
-
-        #search-input::placeholder {
-            color: #666;
-        }
-
-        .search-clear {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 16px;
-            cursor: pointer;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .search-clear:hover {
-            background: #333;
-            color: white;
-        }
-
-        .search-clear.visible {
-            display: flex;
-        }
 
         .main-container {
             position: relative;
@@ -124,7 +72,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #000000 0%, #111111 50%, #000000 100%);
+            background: linear-gradient(45deg, #121212 0%, #1a1a1a 50%, #121212 100%);
             opacity: 1;
         }
 
@@ -135,19 +83,26 @@
         }
 
         .country-path {
-            fill: #4a4a4a;
-            stroke: #2a2a2a;
+            fill: #1E1E1E;
+            stroke: #2A2A2A;
             stroke-width: 0.5;
         }
 
-        /* SVG 선교지 점 스타일 */
+        /* SVG 선교지 점 스타일 - 별처럼 반짝이는 효과 */
         .mission-dot {
             transition: all 0.3s ease;
             cursor: pointer;
+            filter: drop-shadow(0 0 4px currentColor);
+            /* GPU 가속 최적화 */
+            transform: translateZ(0);
+            will-change: transform, opacity;
         }
         
-        .mission-dot:hover {
-            filter: brightness(1.2) drop-shadow(0 0 12px currentColor);
+        /* 데스크톱에서만 호버 효과 적용 */
+        @media (hover: hover) and (pointer: fine) {
+            .mission-dot:hover {
+                filter: brightness(1.3) drop-shadow(0 0 8px currentColor);
+            }
         }
         
         /* 펄스 애니메이션 제거 - 고정된 점 */
@@ -159,46 +114,90 @@
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            z-index: 1000;
+            z-index: 800; /* 필터 버튼 레이어 */
         }
 
         .filter-btn {
-            background: rgba(0, 0, 0, 0.8);
+            background: #333333;
             border: 2px solid #444;
-            color: #cccccc;
-            padding: 10px 18px;
+            color: #E0E0E0;
+            padding: 12px 20px;
+            min-height: 44px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
             transition: all 0.3s ease;
+            /* GPU 가속 최적화 */
+            transform: translateZ(0);
+            will-change: transform, background-color;
+            /* 터치 접근성 개선 */
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(15px);
         }
 
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn.active {
             color: #ffffff;
             border-color: #888;
-            background: rgba(0, 0, 0, 0.95);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: #444444;
+        }
+        
+        /* 데스크톱에서만 호버 효과 적용 */
+        @media (hover: hover) and (pointer: fine) {
+            .filter-btn:hover, .filter-btn.active {
+                color: #ffffff;
+                border-color: #888;
+                background: #444444;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        .filter-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* 필터 버튼 키보드 포커스 */
+        .filter-btn:focus {
+            outline: 2px solid #00E676;
+            outline-offset: 2px;
+        }
+        
+        /* 터치 기기용 필터 버튼 상태 */
+        @media (hover: none) and (pointer: coarse) {
+            .filter-btn:hover {
+                background: #333333;
+                transform: none;
+                box-shadow: none;
+                border-color: #444;
+            }
+            
+            .filter-btn:active {
+                background: #555;
+                transform: translateY(1px);
+            }
         }
 
         .legend {
             position: fixed;
             top: 120px;
             right: 40px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(18, 18, 18, 0.9);
             border: 1px solid #333;
             border-radius: 8px;
             padding: 20px;
             backdrop-filter: blur(10px);
-            z-index: 1000;
+            z-index: 700; /* 범례 레이어 */
         }
 
         .legend-title {
             font-size: 0.9rem;
             margin-bottom: 15px;
-            color: #ffffff;
+            color: #E0E0E0;
             font-weight: 600;
         }
 
@@ -208,7 +207,7 @@
             gap: 10px;
             margin-bottom: 8px;
             font-size: 0.8rem;
-            color: #e0e0e0;
+            color: #E0E0E0;
         }
 
         .legend-dot {
@@ -240,7 +239,57 @@
             transform: translate(-50%, -50%);
             color: #666;
             font-size: 1.2rem;
-            z-index: 10;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.9);
+            padding: 20px 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 로딩 스켈레톤 스타일 */
+        .skeleton {
+            background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        .skeleton-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            border-radius: 0;
+        }
+        
+        .skeleton-controls {
+            position: absolute;
+            top: 120px;
+            right: 30px;
+            width: 44px;
+            height: 150px;
+            border-radius: 8px;
+            z-index: 51;
+        }
+        
+        .skeleton-legend {
+            position: absolute;
+            top: 300px;
+            right: 30px;
+            width: 180px;
+            height: 120px;
+            border-radius: 12px;
+            z-index: 51;
         }
         
         /* 줌 컨트롤 버튼 */
@@ -251,15 +300,17 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            z-index: 1000;
+            z-index: 900; /* 줌 컨트롤 레이어 */
         }
         
         .zoom-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #333;
-            color: white;
+            min-width: 44px;
+            min-height: 44px;
+            width: 44px;
+            height: 44px;
+            background: #333333;
+            border: 1px solid #444;
+            color: #E0E0E0;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
@@ -269,24 +320,96 @@
             font-weight: bold;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            /* GPU 가속 최적화 */
+            transform: translateZ(0);
+            will-change: transform, background-color;
+            /* 터치 접근성 개선 */
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+            user-select: none;
         }
         
-        .zoom-btn:hover {
-            background: rgba(0, 0, 0, 0.9);
-            border-color: #666;
-            transform: scale(1.05);
+        /* 데스크톱에서만 호버 효과 적용 */
+        @media (hover: hover) and (pointer: fine) {
+            .zoom-btn:hover {
+                background: #444444;
+                border-color: #666;
+                transform: scale(1.05);
+            }
         }
         
         .zoom-btn:active {
             transform: scale(0.95);
         }
         
+        /* 키보드 포커스 스타일 */
+        .zoom-btn:focus {
+            outline: 2px solid #00E676;
+            outline-offset: 2px;
+        }
+        
+        /* 터치 기기용 active 상태 */
+        @media (hover: none) and (pointer: coarse) {
+            .zoom-btn:hover {
+                background: #333333;
+                transform: none;
+            }
+            
+            .zoom-btn:active {
+                background: #555;
+                transform: scale(0.95);
+            }
+        }
+        
+        /* 초기화 버튼 반응형 텍스트/아이콘 */
+        .reset-text {
+            display: inline;
+        }
+        
+        .reset-icon {
+            display: none;
+        }
+        
         .reset-btn {
             width: 40px;
-            height: 30px;
+            height: 40px;
             font-size: 12px;
             font-weight: normal;
         }
+
+        /* 툴팁 스타일 */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            pointer-events: none;
+            z-index: 1100; /* 툴팁 최상위 */
+            border: 1px solid #333;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(0); /* 위치 이동 효과 제거 */
+            transition: opacity 0.2s ease; /* opacity만 애니메이션 */
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
 
         /* 모달 스타일 */
         .modal-overlay {
@@ -319,6 +442,9 @@
             position: relative;
             animation: slideUp 0.4s ease;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            /* GPU 가속 최적화 */
+            transform: translateZ(0);
+            will-change: transform, opacity;
         }
 
         .modal-header {
@@ -345,9 +471,12 @@
             transition: all 0.3s ease;
         }
 
-        .modal-close:hover {
-            background: #333;
-            color: white;
+        /* 데스크톱에서만 호버 효과 적용 */
+        @media (hover: hover) and (pointer: fine) {
+            .modal-close:hover {
+                background: #333;
+                color: white;
+            }
         }
 
         .modal-title {
@@ -382,15 +511,15 @@
         }
 
         .modal-status.planned {
-            background: rgba(33, 150, 243, 0.2);
-            color: #2196F3;
-            border: 1px solid #2196F3;
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid #FFC107;
         }
 
         .modal-status.future {
-            background: rgba(255, 152, 0, 0.2);
-            color: #FF9800;
-            border: 1px solid #FF9800;
+            background: rgba(255, 68, 68, 0.2);
+            color: #FF4444;
+            border: 1px solid #FF4444;
         }
 
         .modal-body {
@@ -498,6 +627,27 @@
             font-weight: 500;
         }
 
+        .modal-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #333;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        /* 데스크톱에서만 호버 효과 적용 */
+        @media (hover: hover) and (pointer: fine) {
+            .modal-image:hover {
+                transform: scale(1.02);
+            }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -514,6 +664,57 @@
             }
         }
 
+        /* 대형 데스크톱 (1200px+) */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+            
+            .legend {
+                right: 40px;
+                top: 120px;
+            }
+            
+            .zoom-controls {
+                right: 40px;
+                top: 280px;
+            }
+        }
+        
+        /* 데스크톱 (992px - 1199px) */
+        @media (max-width: 1199px) and (min-width: 992px) {
+            .header {
+                padding: 18px 30px;
+            }
+            
+            .nav {
+                gap: 25px;
+            }
+        }
+
+        /* 태블릿 (768px - 991px) */
+        @media (max-width: 991px) and (min-width: 768px) {
+            .header {
+                padding: 16px 25px;
+            }
+            
+            .nav {
+                gap: 20px;
+            }
+            
+            .nav a {
+                font-size: 0.88rem;
+            }
+            
+            .legend {
+                right: 25px;
+                top: 100px;
+                padding: 15px;
+            }
+        }
+
+        /* 모바일 (768px 이하) */
         @media (max-width: 768px) {
             .header {
                 padding: 15px 20px;
@@ -532,21 +733,6 @@
                 font-size: 0.85rem;
             }
             
-            .search-container {
-                order: -1;
-                width: 100%;
-                justify-content: center;
-            }
-            
-            #search-input {
-                width: 100%;
-                max-width: 280px;
-            }
-            
-            #search-input:focus {
-                width: 100%;
-            }
-            
             .legend {
                 position: relative;
                 top: auto;
@@ -558,26 +744,29 @@
             
             .filters {
                 position: fixed;
-                bottom: 10px;
+                bottom: 20px;
                 left: 10px;
                 right: 10px;
                 justify-content: center;
                 flex-wrap: wrap;
-                gap: 8px;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 15px;
-                border-radius: 12px;
+                gap: 10px;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px 15px;
+                border-radius: 16px;
                 border: 1px solid #333;
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(15px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
             
             .filter-btn {
-                padding: 6px 12px;
-                font-size: 0.8rem;
+                padding: 12px 16px;
+                font-size: 0.85rem;
+                min-width: 60px;
+                font-weight: 600;
             }
             
             .main-container {
-                padding-bottom: 100px;
+                padding-bottom: 120px;
             }
             
             /* 모달 모바일 최적화 */
@@ -629,7 +818,7 @@
             /* 줌 컨트롤 모바일 최적화 */
             .zoom-controls {
                 top: auto;
-                bottom: 120px;
+                bottom: 160px;
                 left: 10px;
                 right: auto;
             }
@@ -639,8 +828,65 @@
                 height: 45px;
                 font-size: 22px;
             }
+            
+            .reset-btn {
+                font-size: 20px;
+            }
         }
         
+        /* 소형 모바일 (576px 이하) */
+        @media (max-width: 576px) {
+            body {
+                font-size: 16px; /* 모바일 기본 텍스트 크기 증가 */
+            }
+            
+            .header {
+                padding: 12px 15px;
+                min-height: 60px;
+            }
+            
+            .nav {
+                gap: 12px;
+            }
+            
+            .nav a {
+                font-size: 0.85rem;
+                padding: 6px 10px;
+                line-height: 1.4;
+                min-height: 36px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .legend {
+                margin: 15px 10px;
+                padding: 12px;
+            }
+            
+            .legend-title {
+                font-size: 0.8rem;
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+            
+            .legend-item {
+                font-size: 0.75rem;
+                line-height: 1.4;
+                margin-bottom: 6px;
+            }
+            
+            .filters {
+                padding: 16px 12px;
+            }
+            
+            .filter-btn {
+                font-size: 0.85rem;
+                padding: 12px 16px;
+                line-height: 1.2;
+            }
+        }
+
+        /* 매우 작은 모바일 (480px 이하) */
         @media (max-width: 480px) {
             .header {
                 padding: 10px 15px;
@@ -669,15 +915,55 @@
             
             .filters {
                 bottom: 5px;
-                left: 5px;
-                right: 5px;
-                padding: 10px;
-                gap: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 10px);
+                max-width: 400px;
+                padding: 12px 10px;
+                gap: 8px;
+                background: rgba(0, 0, 0, 0.98);
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: center;
+                align-items: center;
             }
             
             .filter-btn {
-                padding: 5px 10px;
+                padding: 8px 12px;
                 font-size: 0.75rem;
+                min-width: 60px;
+                border-radius: 16px;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+            }
+            
+            .main-container {
+                padding-bottom: 100px;
+            }
+            
+            .zoom-controls {
+                bottom: 110px;
+                left: 8px;
+            }
+            
+            .zoom-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .reset-btn {
+                font-size: 18px;
+            }
+            
+            /* 모바일에서 초기화 버튼을 돋보기 아이콘으로 */
+            .reset-text {
+                display: none;
+            }
+            
+            .reset-icon {
+                display: inline;
             }
             
             .modal-header {
@@ -700,12 +986,9 @@
 </head>
 <body>
     <div class="header">
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="국가명 검색..." />
-            <button class="search-clear" id="search-clear" onclick="clearSearch()">&times;</button>
-        </div>
+        <div class="logo">사랑열매교회</div>
         <nav class="nav">
-            <a href="index.html" class="active">선교 현황</a>
+            <a href="mission_map_simple.html" class="active">선교 현황</a>
             <a href="church-intro.html">교회 소개</a>
             <a href="mission-stories.html">선교 이야기</a>
             <a href="donation.html">후원하기</a>
@@ -717,7 +1000,14 @@
             <svg class="map-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
                 <!-- D3로 동적으로 로드될 지도 -->
             </svg>
-            <div class="loading-message" id="loading">지도 로딩 중...</div>
+            <div class="loading-message" id="loading">🌍 지도를 불러오고 있습니다...</div>
+            
+            <!-- 로딩 스켈레톤 -->
+            <div id="skeleton-container" style="display: block;">
+                <div class="skeleton skeleton-map"></div>
+                <div class="skeleton skeleton-controls"></div>
+                <div class="skeleton skeleton-legend"></div>
+            </div>
         </div>
 
         <!-- 선교지 점들은 이제 SVG 내부에 circle 요소로 렌더링됨 -->
@@ -727,21 +1017,24 @@
     <div class="zoom-controls">
         <button class="zoom-btn" onclick="zoomIn()" title="확대">+</button>
         <button class="zoom-btn" onclick="zoomOut()" title="축소">-</button>
-        <button class="zoom-btn reset-btn" onclick="resetZoom()" title="원래 크기">초기화</button>
+        <button class="zoom-btn reset-btn" onclick="resetZoom()" title="원래 크기">
+            <span class="reset-text">초기화</span>
+            <span class="reset-icon">🔍</span>
+        </button>
     </div>
 
     <div class="legend">
         <div class="legend-title">선교 현황</div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #00E676;"></div>
-            <span>선교 완료</span>
+            <div class="legend-dot" style="background: #4CAF50;"></div>
+            <span>개척 완료</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #FF1744;"></div>
+            <div class="legend-dot" style="background: #FFC107;"></div>
             <span>진행 중</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #FF6D00;"></div>
+            <div class="legend-dot" style="background: #FF4444;"></div>
             <span>계획 중</span>
         </div>
     </div>
@@ -752,6 +1045,11 @@
         <button class="filter-btn" onclick="showPlanned()">진행중</button>
         <button class="filter-btn" onclick="showFuture()">계획</button>
     </div>
+
+    <!-- 툴팁 -->
+    <div id="tooltip" class="tooltip"></div>
+    
+    <!-- 회전 힌트 -->
 
     <!-- 선교 상세 정보 모달 -->
     <div class="modal-overlay" id="mission-modal">
@@ -765,6 +1063,10 @@
             <div class="modal-body">
                 <div class="modal-section">
                     <p class="modal-description" id="modal-description"></p>
+                </div>
+                
+                <div class="modal-section" id="modal-image-section" style="display: none;">
+                    <img id="modal-image" class="modal-image" alt="선교지 사진" />
                 </div>
                 
                 <div class="modal-section" id="modal-stats-section">
@@ -791,6 +1093,20 @@
     </div>
 
     <script>
+        // 안전한 데이터 접근을 위한 헬퍼 함수들
+        function safeGet(obj, key, defaultValue = '') {
+            return obj && obj[key] !== undefined && obj[key] !== null ? obj[key] : defaultValue;
+        }
+        
+        function safeGetNumber(obj, key, defaultValue = 0) {
+            const value = safeGet(obj, key, defaultValue);
+            return isNaN(value) ? defaultValue : Number(value);
+        }
+        
+        function safeGetObject(obj, key, defaultValue = {}) {
+            return obj && typeof obj[key] === 'object' && obj[key] !== null ? obj[key] : defaultValue;
+        }
+
         // D3.js로 실제 세계지도 로드 - CORS 문제 해결
         const svg = d3.select(".map-svg");
         const width = 1000;
@@ -813,7 +1129,11 @@
             });
         
         // SVG에 줌 기능 적용
-        svg.call(zoom);
+        svg.call(zoom)
+            // 모바일 터치 제스처 최적화
+            .on("touchstart touchmove touchend", function(event) {
+                event.preventDefault(); // 기본 터치 동작 방지
+            });
             
 
         const path = d3.geoPath().projection(projection);
@@ -824,6 +1144,7 @@
             "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
         ];
         let geoData = null;
+        let world = null;
 
         async function loadWorldMap() {
             for (let i = 0; i < reliableSources.length; i++) {
@@ -832,7 +1153,7 @@
                     console.log(`시도 중: ${reliableSources[i]}`);
                     
                     // TopoJSON 데이터 가져오기
-                    const world = await d3.json(reliableSources[i]);
+                    world = await d3.json(reliableSources[i]);
                     console.log("TopoJSON 데이터 로드 성공:", world);
                     
                     // TopoJSON을 GeoJSON으로 변환
@@ -859,14 +1180,20 @@
                         .style("opacity", "1");
                     
                     loading.style.display = 'none';
+                    // 스켈레톤 UI 숨기기
+                    document.getElementById('skeleton-container').style.display = 'none';
                     console.log("세계지도 렌더링 완료!");
                     
                     // 국가 feature 저장 (남극 제외)
                     storeCountryFeatures(filteredCountries);
                     
-                    // 선교지 점들 렌더링
+                    // 선교지 점들 렌더링 (지도 로드 완료 후)
+                    geoData = countries; // 지도 데이터 저장
                     if (missionsData && missionsData.missions) {
                         renderMissionLocations();
+                    } else {
+                        // 선교 데이터가 없으면 로드 시도
+                        loadMissionsData();
                     }
                     return;
                     
@@ -917,51 +1244,114 @@
             checkUnmatchedCountries();
         }
         
-        // SVG 점들의 위치를 국가 중심점에 배치
-        function updateSVGDotPositions() {
-            console.log("=== SVG 점 위치 계산 시작 ===");
+        // 실제 도시 좌표를 사용해서 점 배치
+        function updateCityDotPositions() {
+            console.log("=== 실제 도시 좌표 사용 점 배치 시작 ===");
             
             const dots = mapGroup.selectAll('.mission-dot');
             let positionedCount = 0;
             
             dots.each(function(d) {
                 const dot = d3.select(this);
-                const englishCountryName = countryNameMapping[d.country];
                 
-                if (englishCountryName && countryFeatures.has(englishCountryName)) {
-                    // 해당 국가의 feature 가져오기
-                    const countryFeature = countryFeatures.get(englishCountryName);
-                    
+                // 안전한 좌표 데이터 추출
+                const coordinates = safeGetObject(d, 'coordinates', {});
+                const lat = safeGetNumber(coordinates, 'lat', null);
+                const lng = safeGetNumber(coordinates, 'lng', null);
+                const name = safeGet(d, 'name', safeGet(d, 'id', '알 수 없음'));
+                const country = safeGet(d, 'country', '');
+                
+                // 유효한 좌표가 있는지 확인
+                if (lat !== null && lng !== null && lat !== 0 && lng !== 0) {
                     try {
-                        // D3 path.centroid()로 SVG 좌표 직접 계산
-                        const centroid = path.centroid(countryFeature);
+                        // GPS 좌표를 SVG 픽셀 좌표로 변환
+                        const coords = projection([lng, lat]);
                         
-                        if (centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
-                            // SVG 좌표 직접 사용 (완벽한 동기화)
-                            dot.attr('cx', centroid[0])
-                               .attr('cy', centroid[1])
-                               .style('opacity', 1) // 표시
+                        if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                            // 실제 도시 위치에 점 표시
+                            dot.attr('cx', coords[0])
+                               .attr('cy', coords[1])
+                               .style('opacity', 1)
                                .transition()
                                .duration(500)
                                .style('opacity', 1);
                             
-                            console.log(`✓ ${d.name} (${d.country}): SVG(${centroid[0].toFixed(1)}, ${centroid[1].toFixed(1)})`);
+                            console.log(`✓ ${name}: GPS(${lat}, ${lng}) → SVG(${coords[0].toFixed(1)}, ${coords[1].toFixed(1)})`);
                             positionedCount++;
                         } else {
-                            console.warn(`${d.name}: centroid 계산 실패`);
-                            dot.style('opacity', 0); // 숨김
+                            console.warn(`${name}: 좌표 투영 실패`);
+                            dot.style('opacity', 0);
                         }
                     } catch (error) {
-                        console.warn(`${d.name} 위치 계산 실패:`, error);
-                        dot.style('opacity', 0); // 숨김
+                        console.warn(`${name} 위치 계산 실패:`, error);
+                        dot.style('opacity', 0);
                     }
                 } else {
-                    console.warn(`${d.name}: 국가 매칭 실패 (${d.country} → ${englishCountryName})`);
-                    dot.style('opacity', 0); // 숨김
+                    // 도시 좌표가 없으면 해당 국가의 중심점 사용
+                    console.log(`${name}: 도시 좌표 없음, 국가 중심점 사용 시도`);
+                    if (country) {
+                        const countryCenter = getCountryCenter(country);
+                        if (countryCenter) {
+                            const coords = projection(countryCenter);
+                            if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                                dot.attr('cx', coords[0])
+                                   .attr('cy', coords[1])
+                                   .style('opacity', 1)
+                                   .transition()
+                                   .duration(500)
+                                   .style('opacity', 1);
+                                
+                                console.log(`✓ ${name}: 국가 중심점 사용 → SVG(${coords[0].toFixed(1)}, ${coords[1].toFixed(1)})`);
+                                positionedCount++;
+                            } else {
+                                console.warn(`${name}: 국가 중심점 투영 실패`);
+                                dot.style('opacity', 0);
+                            }
+                        } else {
+                            console.warn(`${name}: 국가 "${country}" 중심점 찾기 실패`);
+                            dot.style('opacity', 0);
+                        }
+                    } else {
+                        console.warn(`${name}: 좌표와 국가 정보 모두 없음`);
+                        dot.style('opacity', 0);
+                    }
                 }
             });
             
-            console.log(`${positionedCount}개 점 위치 설정 완료`);
+            console.log(`${positionedCount}개 점이 실제 도시 위치에 배치 완료`);
+        }
+        
+        // 국가 중심점 계산 함수
+        function getCountryCenter(countryName) {
+            if (!world || !world.objects || !world.objects.countries) {
+                return null;
+            }
+            
+            try {
+                const countries = topojson.feature(world, world.objects.countries);
+                
+                // 한글 국가명을 영어로 변환
+                const englishName = countryNameMapping[countryName] || countryName;
+                
+                // 해당 국가 찾기
+                const targetCountry = countries.features.find(country => {
+                    const name = country.properties.NAME || country.properties.name || country.properties.NAME_EN;
+                    return name === englishName || name === countryName;
+                });
+                
+                if (targetCountry && targetCountry.geometry) {
+                    // 국가의 centroid (중심점) 계산
+                    const centroid = d3.geoCentroid(targetCountry);
+                    console.log(`${countryName} 국가 중심점:`, centroid);
+                    return centroid;
+                } else {
+                    console.warn(`국가 "${countryName}" (${englishName})를 지도에서 찾을 수 없음`);
+                    return null;
+                }
+            } catch (error) {
+                console.error(`국가 중심점 계산 오류 (${countryName}):`, error);
+                return null;
+            }
         }
         
         // 매칭되지 않은 국가들 확인 및 대안 찾기
@@ -999,39 +1389,78 @@
         // 선교 데이터 변수
         let missionsData = null;
         let currentFilter = 'all';
-        let searchQuery = '';
 
-        // 검색 기능
-        const searchInput = document.getElementById('search-input');
-        const searchClear = document.getElementById('search-clear');
-        
-        searchInput.addEventListener('input', function(e) {
-            searchQuery = e.target.value.toLowerCase().trim();
-            searchClear.classList.toggle('visible', searchQuery.length > 0);
-            updateFilter();
-        });
-        
-        function clearSearch() {
-            searchInput.value = '';
-            searchQuery = '';
-            searchClear.classList.remove('visible');
-            updateFilter();
-            searchInput.focus();
+        // 데이터 검증 및 정리 함수
+        function validateMissionData(missions) {
+            if (!Array.isArray(missions)) {
+                console.warn('선교 데이터가 배열이 아닙니다:', missions);
+                return [];
+            }
+            
+            return missions.map((mission, index) => {
+                const validatedMission = {
+                    id: safeGet(mission, 'id', `mission_${index}_${Date.now()}`),
+                    name: safeGet(mission, 'name', ''),
+                    country: safeGet(mission, 'country', ''),
+                    continent: safeGet(mission, 'continent', ''),
+                    status: safeGet(mission, 'status', 'future'),
+                    description: safeGet(mission, 'description', ''),
+                    image: safeGet(mission, 'image', ''),
+                    coordinates: safeGetObject(mission, 'coordinates', {})
+                };
+                
+                // 좌표 검증
+                const coords = validatedMission.coordinates;
+                if (coords.lat !== undefined && coords.lng !== undefined) {
+                    coords.lat = safeGetNumber(coords, 'lat', 0);
+                    coords.lng = safeGetNumber(coords, 'lng', 0);
+                    
+                    // 유효한 좌표 범위 체크
+                    if (coords.lat < -90 || coords.lat > 90 || coords.lng < -180 || coords.lng > 180) {
+                        console.warn(`잘못된 좌표 범위: ${validatedMission.name || validatedMission.id}`, coords);
+                        validatedMission.coordinates = {};
+                    }
+                }
+                
+                return validatedMission;
+            });
         }
 
         // 선교 데이터 로드
         async function loadMissionsData() {
             try {
-                const response = await fetch('./data/missions-data.json');
-                missionsData = await response.json();
-                console.log('선교 데이터 로드 완료:', missionsData);
+                const response = await fetch('./missions-data.json');
+                const rawData = await response.json();
+                
+                // 데이터 검증 및 정리
+                const missions = validateMissionData(rawData.missions || []);
+                missionsData = {
+                    missions: missions,
+                    statistics: rawData.statistics || {},
+                    continents: rawData.continents || {}
+                };
+                
+                console.log('선교 데이터 로드 및 검증 완료:', missionsData);
                 renderMissionLocations();
-                updateStatistics();
             } catch (error) {
                 console.error('선교 데이터 로드 실패:', error);
                 // 로컬 실행을 위한 대체 데이터
                 loadFallbackData();
             }
+        }
+
+        // 대체 데이터 (fetch 실패 시)
+        function loadFallbackData() {
+            missionsData = {
+                missions: [
+                    { id: "seoul", name: "서울", country: "대한민국", status: "completed", startDate: "2004-03", endDate: "2018-12", missionaries: 8, churches: 12, description: "한국 선교 본부, 현지 교회 개척 및 신학교 설립", achievements: ["교회 12곳 개척", "신학교 1곳 설립", "현지 목회자 25명 양성"], activities: ["교회 개척", "신학 교육", "사회 봉사"] },
+                    { id: "beijing", name: "베이징", country: "중국", status: "completed", startDate: "2005-06", endDate: "2020-08", missionaries: 6, churches: 8, description: "중국 북경 지역 복음 전파 및 교회 개척", achievements: ["교회 8곳 개척", "성경학교 2곳 운영", "현지 목회자 18명 배출"], activities: ["교회 개척", "성경 교육", "문화 교류"] },
+                    { id: "tokyo", name: "도쿄", country: "일본", status: "completed", startDate: "2007-02", endDate: "2019-11", missionaries: 4, churches: 5, description: "일본 도쿄 지역 한인 교회 및 현지 교회 사역", achievements: ["교회 5곳 개척", "유학생 사역 확장", "현지인 목회자 8명 양성"], activities: ["교회 개척", "유학생 사역", "문화 적응 지원"] },
+                    { id: "mumbai", name: "뭄바이", country: "인도", status: "planned", startDate: "2022-03", missionaries: 3, churches: 2, description: "인도 뭄바이 지역 복음 전파 및 교육 사업", achievements: ["교회 2곳 개척", "교육센터 1곳 운영"], activities: ["교회 개척", "교육 사업", "빈민 지원"] }
+                ]
+            };
+            console.log('대체 데이터 사용 중 - 웹서버 실행을 권장합니다');
+            renderMissionLocations();
         }
         
 
@@ -1054,7 +1483,7 @@
                 .enter()
                 .append('circle')
                 .attr('class', d => `mission-dot ${d.id} ${d.status}`)
-                .attr('r', 3)
+                .attr('r', 2)
                 .attr('data-status', d => d.status)
                 .attr('data-mission-id', d => d.id)
                 .attr('data-country', d => d.country)
@@ -1064,19 +1493,24 @@
                     showMissionDetails(d);
                 })
                 .on('mouseover', function(event, d) {
-                    d3.select(this).attr('r', 7);
+                    d3.select(this).attr('r', 4);
+                    showTooltip(event, d);
                 })
                 .on('mouseout', function(event, d) {
-                    d3.select(this).attr('r', 3);
+                    d3.select(this).attr('r', 2);
+                    hideTooltip();
+                })
+                .on('mousemove', function(event, d) {
+                    updateTooltipPosition(event);
                 });
             
-            // 상태별 색상과 애니메이션 적용 (더 선명한 색상)
+            // 상태별 색상과 애니메이션 적용 (새로운 색상 팔레트)
             dots.style('fill', d => {
                 switch(d.status) {
-                    case 'completed': return '#00E676';  // 더 밝은 녹색
-                    case 'planned': return '#FF1744';    // 더 선명한 빨간색
-                    case 'future': return '#FF6D00';     // 더 진한 주황색
-                    default: return '#FF1744';
+                    case 'completed': return '#4CAF50';  // 따뜻한 초록 (완료)
+                    case 'planned': return '#FFC107';    // 골드 옐로우 (진행중)
+                    case 'future': return '#FF4444';     // 빨간색 (계획중)
+                    default: return '#03A9F4';
                 }
             })
             .style('filter', 'none')
@@ -1085,8 +1519,8 @@
             
             console.log(`${missionsData.missions.length}개 SVG 점 생성 완료`);
             
-            // 국가별 위치 계산 및 배치
-            updateSVGDotPositions();
+            // 실제 도시 좌표 사용해서 점 배치
+            updateCityDotPositions();
         }
         
         // 한국어 ↔ 영어 국가명 매핑 테이블
@@ -1098,16 +1532,6 @@
             "인도": "India",
             "태국": "Thailand", 
             "인도네시아": "Indonesia",
-            "카자흐스탄": "Kazakhstan",
-            "키르기스스탄": "Kyrgyzstan",
-            "타지키스탄": "Tajikistan",
-            "투르크메니스탄": "Turkmenistan",
-            "아프가니스탄": "Afghanistan",
-            "이란": "Iran",
-            "이라크": "Iraq",
-            "사우디아라비아": "Saudi Arabia",
-            "아랍에미레이트": "United Arab Emirates",
-            "파키스탄": "Pakistan",
             "독일": "Germany",
             "영국": "United Kingdom", 
             "프랑스": "France",
@@ -1123,7 +1547,46 @@
             "아르헨티나": "Argentina", 
             "페루": "Peru",
             "호주": "Australia",
-            "뉴질랜드": "New Zealand"
+            "뉴질랜드": "New Zealand",
+            // 새로 추가된 국가들
+            "카자흐스탄": "Kazakhstan",
+            "키르기스스탄": "Kyrgyzstan",
+            "타지키스탄": "Tajikistan",
+            "투르크메니스탄": "Turkmenistan",
+            "아프가니스탄": "Afghanistan",
+            "이란": "Iran",
+            "이라크": "Iraq", 
+            "사우디아라비아": "Saudi Arabia",
+            "아랍에미레이트": "United Arab Emirates",
+            "파키스탄": "Pakistan",
+            "스리랑카": "Sri Lanka",
+            "네팔": "Nepal",
+            "부탄": "Bhutan",
+            "방글라데시": "Bangladesh",
+            "말레이시아": "Malaysia",
+            "오만": "Oman",
+            "예멘": "Yemen",
+            "조지아": "Georgia",
+            "아제르바이잔": "Azerbaijan",
+            "아르메니아": "Armenia",
+            "터키": "Turkey",
+            "시리아": "Syria",
+            "레바논": "Lebanon",
+            "요르단": "Jordan",
+            "이스라엘": "Israel",
+            "리비아": "Libya",
+            "튀니지": "Tunisia",
+            "알제리": "Algeria",
+            "모로코": "Morocco",
+            "서사하라": "Western Sahara",
+            "모리타니": "Mauritania",
+            "말리": "Mali",
+            "니제르": "Niger",
+            "차드": "Chad",
+            "수단": "Sudan",
+            "에리트레아": "Eritrea",
+            "지부티": "Djibouti",
+            "소말리아": "Somalia"
         };
 
         
@@ -1132,47 +1595,24 @@
             if (!missionsData || !mapGroup) return;
             
             const dots = mapGroup.selectAll('.mission-dot');
-            let visibleCount = 0;
             
             dots.each(function(d) {
                 const dot = d3.select(this);
                 const status = d.status;
-                const name = d.name.toLowerCase();
-                const country = d.country.toLowerCase();
                 
-                // 필터 조건 검사
-                const matchesStatus = currentFilter === 'all' || status === currentFilter;
-                const matchesSearch = !searchQuery || 
-                                    name.includes(searchQuery) || 
-                                    country.includes(searchQuery);
-                
-                const shouldShow = matchesStatus && matchesSearch;
+                // 필터 조건 검사 (검색 기능 제거)
+                const shouldShow = currentFilter === 'all' || status === currentFilter;
                 
                 if (shouldShow) {
                     dot.style('opacity', 1)
                        .style('pointer-events', 'all')
-                       .attr('r', 3);
-                    visibleCount++;
+                       .attr('r', 2);
                 } else {
                     dot.style('opacity', 0.3)
                        .style('pointer-events', 'none')
                        .attr('r', 2);
                 }
             });
-            
-            // 검색 결과 없음 메시지
-            const noResults = document.querySelector('.no-results');
-            if (visibleCount === 0 && searchQuery) {
-                if (!noResults) {
-                    const noResultsEl = document.createElement('div');
-                    noResultsEl.className = 'no-results';
-                    noResultsEl.innerHTML = '검색 결과가 없습니다.';
-                    document.body.appendChild(noResultsEl);
-                }
-                document.querySelector('.no-results').classList.add('visible');
-            } else if (noResults) {
-                noResults.classList.remove('visible');
-            }
         }
         
 
@@ -1193,101 +1633,77 @@
             const achievements = document.getElementById('modal-achievements');
             const activities = document.getElementById('modal-activities');
             
-            // 기본 정보 설정
-            title.textContent = mission.name;
-            subtitle.textContent = mission.country;
+            // 안전한 데이터 추출
+            const country = safeGet(mission, 'country', '');
+            const name = safeGet(mission, 'name', '');
+            const missionStatus = safeGet(mission, 'status', 'future');
+            const missionDescription = safeGet(mission, 'description', '');
+            
+            // 기본 정보 설정 (국가명을 제목으로, 도시명을 부제목으로)
+            title.textContent = country || '선교지';
+            subtitle.textContent = name;
+            
+            // name이 비어있으면 subtitle 숨김
+            if (!name) {
+                subtitle.style.display = 'none';
+            } else {
+                subtitle.style.display = 'block';
+            }
             
             // 상태 설정
-            status.className = `modal-status ${mission.status}`;
+            status.className = `modal-status ${missionStatus}`;
             const statusText = {
                 'completed': '선교 완료',
                 'planned': '진행 중',
                 'future': '계획 중'
             };
-            status.textContent = statusText[mission.status] || mission.status;
+            status.textContent = statusText[missionStatus] || missionStatus;
             
             // 설명
-            description.textContent = mission.description || '선교 사역 정보를 준비하고 있습니다.';
+            description.textContent = missionDescription;
             
-            // 통계 정보
+            // 이미지 설정 (지연 로딩 적용)
+            const imageSection = document.getElementById('modal-image-section');
+            const imageElement = document.getElementById('modal-image');
+            const missionImage = safeGet(mission, 'image', '');
+            
+            if (missionImage) {
+                // 이미지 지연 로딩 구현
+                imageElement.style.opacity = '0';
+                imageElement.style.transition = 'opacity 0.3s ease';
+                
+                const img = new Image();
+                img.onload = function() {
+                    imageElement.src = img.src;
+                    imageElement.style.opacity = '1';
+                };
+                img.onerror = function() {
+                    // 이미지 로드 실패 시 숨기기
+                    imageSection.style.display = 'none';
+                };
+                img.src = missionImage;
+                
+                imageSection.style.display = 'block';
+            } else {
+                imageSection.style.display = 'none';
+            }
+            
+            // 통계 정보 섹션 숨김 (missionaries, churches 데이터 제거됨)
             stats.innerHTML = '';
-            if (mission.missionaries !== undefined) {
-                stats.innerHTML += `
-                    <div class="modal-stat">
-                        <div class="modal-stat-number">${mission.missionaries || 0}</div>
-                        <div class="modal-stat-label">선교사</div>
-                    </div>
-                `;
-            }
-            if (mission.churches !== undefined) {
-                stats.innerHTML += `
-                    <div class="modal-stat">
-                        <div class="modal-stat-number">${mission.churches || 0}</div>
-                        <div class="modal-stat-label">교회</div>
-                    </div>
-                `;
-            }
             
-            // 기간 정보
-            dates.innerHTML = '';
-            if (mission.startDate) {
-                dates.innerHTML += `
-                    <div class="modal-date">
-                        <div class="modal-date-label">시작일</div>
-                        <div class="modal-date-value">${mission.startDate}</div>
-                    </div>
-                `;
-            }
-            if (mission.endDate) {
-                dates.innerHTML += `
-                    <div class="modal-date">
-                        <div class="modal-date-label">종료일</div>
-                        <div class="modal-date-value">${mission.endDate}</div>
-                    </div>
-                `;
-            } else if (mission.status !== 'future') {
-                dates.innerHTML += `
-                    <div class="modal-date">
-                        <div class="modal-date-label">상태</div>
-                        <div class="modal-date-value">진행 중</div>
-                    </div>
-                `;
-            }
+            // 기간 정보 제거됨
             
-            // 주요 성과
-            achievements.innerHTML = '';
-            if (mission.achievements && mission.achievements.length > 0) {
-                mission.achievements.forEach(achievement => {
-                    achievements.innerHTML += `<li>${achievement}</li>`;
-                });
-                document.getElementById('modal-achievements-section').style.display = 'block';
-            } else {
-                document.getElementById('modal-achievements-section').style.display = 'none';
-            }
+            // 주요 성과 섹션 제거됨
+            document.getElementById('modal-achievements-section').style.display = 'none';
             
-            // 주요 활동
-            activities.innerHTML = '';
-            if (mission.activities && mission.activities.length > 0) {
-                mission.activities.forEach(activity => {
-                    activities.innerHTML += `<li>${activity}</li>`;
-                });
-                document.getElementById('modal-activities-section').style.display = 'block';
-            } else {
-                document.getElementById('modal-activities-section').style.display = 'none';
-            }
+            // 주요 활동 섹션 제거됨
+            document.getElementById('modal-activities-section').style.display = 'none';
             
-            // 비어있는 섹션 숨기기
-            if (!mission.missionaries && !mission.churches) {
-                document.getElementById('modal-stats-section').style.display = 'none';
-            } else {
-                document.getElementById('modal-stats-section').style.display = 'block';
-            }
+            // 통계 섹션 항상 숨기기 (missionaries, churches 데이터 제거됨)
+            document.getElementById('modal-stats-section').style.display = 'none';
             
-            if (!mission.startDate && !mission.endDate) {
-                document.getElementById('modal-dates-section').style.display = 'none';
-            } else {
-                document.getElementById('modal-dates-section').style.display = 'block';
-            }
+            // 기간 섹션 항상 숨기기
+            document.getElementById('modal-dates-section').style.display = 'none';
             
             // 모달 표시
             modal.classList.add('active');
@@ -1336,8 +1752,73 @@
             );
         }
 
-        // 선교 데이터 로드 시작
-        loadMissionsData();
+        // 툴팁 관련 함수들
+        const tooltip = document.getElementById('tooltip');
+        
+        function showTooltip(event, data) {
+            const country = safeGet(data, 'country', '');
+            const name = safeGet(data, 'name', '');
+            
+            // 툴팁 내용 구성 (빈 값은 공백으로 처리)
+            let tooltipContent = '';
+            if (country) {
+                tooltipContent += `<strong>${country}</strong>`;
+            }
+            if (name) {
+                if (tooltipContent) tooltipContent += '<br>';
+                tooltipContent += `<span style="color: #ccc; font-size: 0.8rem;">${name}</span>`;
+            }
+            
+            // 내용이 없으면 기본 메시지
+            if (!tooltipContent) {
+                tooltipContent = '<span style="color: #ccc;">선교지</span>';
+            }
+            
+            tooltip.innerHTML = tooltipContent;
+            
+            // 위치 설정 후 표시 (애니메이션 없이 즉시)
+            updateTooltipPosition(event);
+            tooltip.style.transition = 'none'; // 위치 변경 시 애니메이션 제거
+            tooltip.classList.add('visible');
+            
+            // 다음 프레임에서 transition 복원 (opacity 애니메이션은 유지)
+            requestAnimationFrame(() => {
+                tooltip.style.transition = 'opacity 0.2s ease';
+            });
+        }
+        
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+        }
+        
+        function updateTooltipPosition(event) {
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const x = event.pageX;
+            const y = event.pageY;
+            
+            // 화면 경계 체크하여 위치 조정
+            let left = x - tooltipRect.width / 2;
+            let top = y - tooltipRect.height - 10;
+            
+            // 왼쪽 경계 체크
+            if (left < 10) left = 10;
+            // 오른쪽 경계 체크  
+            if (left + tooltipRect.width > window.innerWidth - 10) {
+                left = window.innerWidth - tooltipRect.width - 10;
+            }
+            // 위쪽 경계 체크
+            if (top < 10) {
+                top = y + 10; // 마우스 아래쪽에 표시
+            }
+            
+            // 애니메이션 없이 즉시 위치 변경
+            tooltip.style.transition = 'none';
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+        }
+
+        // 지도 먼저 로드, 완료 후 선교 데이터 처리
+        // loadMissionsData();
 
         function showAll() {
             currentFilter = 'all';
