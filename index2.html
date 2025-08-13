@@ -98,36 +98,72 @@
         }
         
         
-        /* 네비게이션 핀 스타일 (4px 원형 점) */
+        /* 네비게이션 핀 스타일 */
         .mission-pin {
             position: relative;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
+            width: 12px;
+            height: 12px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 100;
-            background: #1e40af; /* 기본 색상 (진한 파란색) */
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mission-pin::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6; /* 기본 색상 */
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mission-pin::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 2.5px;
+            transform: translate(-1.8px, -2.5px) translateZ(0);
             transform-origin: center;
-            pointer-events: all;
+            will-change: auto;
+            backface-visibility: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+        
+        .mission-pin:hover {
+            transform: scale(1.2) translateY(-2px) translateZ(0);
+        }
+        
+        .mission-pin:hover::before {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.0);
         }
         
         .mission-pin:active {
-            transform: scale(1.5) translateZ(0);
-            transform-origin: center;
+            transform: scale(1.1) translateY(0px) translateZ(0);
         }
         
-        /* 핀 색상별 스타일 */
-        .mission-pin.completed {
-            background: #1e40af; /* 진한 파란색 */
+        /* 핀 색상별 스타일 - ::before에만 적용 */
+        .mission-pin.completed::before {
+            background: #3b82f6;
         }
         
-        .mission-pin.planned {
-            background: #ca8a04; /* 진한 노란색 */
+        .mission-pin.planned::before {
+            background: #eab308;
         }
         
-        .mission-pin.future {
-            background: #dc2626; /* 진한 빨간색 */
+        .mission-pin.future::before {
+            background: #ef4444;
         }
         
         /* 데스크톱에서만 호버 효과 적용 */
@@ -1064,11 +1100,11 @@
             <span>개척 완료</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #e9daae;"></div>
+            <div class="legend-dot" style="background: #e4bcc1;"></div>
             <span>진행 중</span>
         </div>
         <div class="legend-item">
-            <div class="legend-dot" style="background: #e4bcc1;"></div>
+            <div class="legend-dot" style="background: #e9daae;"></div>
             <span>계획 중</span>
         </div>
     </div>
@@ -1160,9 +1196,6 @@
             .on("zoom", function(event) {
                 const { transform } = event;
                 mapGroup.attr("transform", transform);
-                
-                // 줌 레벨에 따라 핀 크기 조정 (퍼센트 기반)
-                updatePinSizes(transform.k);
             });
         
         // SVG에 줌 기능 적용
@@ -1170,338 +1203,10 @@
             // 모바일 터치 제스처 최적화
             .on("touchstart touchmove touchend", function(event) {
                 event.preventDefault(); // 기본 터치 동작 방지
-            })
+            });
             
 
         const path = d3.geoPath().projection(projection);
-
-        let currentZoomLevel = 1;
-
-
-        // 모든 후보 핀들 찾기 (개선: 다중 후보 감지)
-        function findAllCandidatePins(mousePos, event) {
-            const candidates = [];
-            
-            // 줌 레벨에 따른 감지 거리 조정 (기존 12-20px → 30-80px로 확장)
-            const baseDistance = 80; // 기본 감지 거리를 4배 증가
-            const maxHoverDistance = Math.max(baseDistance / currentZoomLevel, 30); // 최소 감지 거리도 증가
-            
-            // 모든 핀과의 거리 계산
-            mapGroup.selectAll('.mission-pin-group').each(function(d) {
-                const pinGroup = d3.select(this);
-                const transform = pinGroup.attr('transform');
-                const pinPos = extractTransformPosition(transform);
-                
-                // D3 데이터 바인딩에서 데이터 가져오기
-                const missionData = d3.select(this).datum();
-                
-                if (!missionData) {
-                    console.warn('핀에 연결된 데이터가 없습니다:', this);
-                    return;
-                }
-                
-                // 현재 줌/팬 변환을 고려한 실제 화면 좌표 계산
-                const currentTransform = d3.zoomTransform(svg.node());
-                const screenX = pinPos.x * currentTransform.k + currentTransform.x;
-                const screenY = pinPos.y * currentTransform.k + currentTransform.y;
-                
-                // 마우스 위치를 화면 좌표로 변환
-                const svgRect = svg.node().getBoundingClientRect();
-                const mouseX = event.clientX - svgRect.left;
-                const mouseY = event.clientY - svgRect.top;
-                
-                // 거리 계산
-                const distance = Math.sqrt(
-                    Math.pow(mouseX - screenX, 2) + 
-                    Math.pow(mouseY - screenY, 2)
-                );
-                
-                // 감지 거리 내의 모든 핀을 후보로 수집
-                if (distance < maxHoverDistance) {
-                    candidates.push({ 
-                        element: this, 
-                        data: missionData, 
-                        distance: distance,
-                        pinDiv: pinGroup.select('.mission-pin').node(),
-                        screenX: screenX,
-                        screenY: screenY
-                    });
-                }
-            });
-            
-            // 거리 순으로 정렬
-            return candidates.sort((a, b) => a.distance - b.distance);
-        }
-
-        // 가장 가까운 핀 찾기 (개선: 다중 후보 시스템 활용)
-        function findNearestPin(mousePos, event) {
-            // 현재 마우스 위치
-            const svgRect = svg.node().getBoundingClientRect();
-            const mouseX = event.clientX - svgRect.left;
-            const mouseY = event.clientY - svgRect.top;
-            
-            // 마우스 움직임 감지
-            const mouseMovement = Math.sqrt(
-                Math.pow(mouseX - lastMousePos.x, 2) + 
-                Math.pow(mouseY - lastMousePos.y, 2)
-            );
-            
-            // 모든 후보 핀들 찾기
-            const newCandidates = findAllCandidatePins(mousePos, event);
-            
-            // 후보 핀이 변경되었거나, 마우스가 많이 움직인 경우 후보 업데이트
-            if (newCandidates.length !== candidatePins.length || 
-                mouseMovement > 15 || // 15px 이상 움직이면
-                !candidatePins.length) {
-                
-                candidatePins = newCandidates;
-                currentCandidateIndex = 0;
-                
-                console.log(`후보 핀 업데이트: ${candidatePins.length}개 발견`);
-                if (candidatePins.length > 1) {
-                    console.log(`다중 핀 감지됨: ${candidatePins.map(p => p.data.name).join(', ')}`);
-                }
-            }
-            // 마우스가 미세하게 움직이면 (3-15px) 다음 후보로 전환
-            else if (candidatePins.length > 1 && mouseMovement > 3 && mouseMovement <= 15) {
-                currentCandidateIndex = (currentCandidateIndex + 1) % candidatePins.length;
-                console.log(`핀 전환: ${candidatePins[currentCandidateIndex].data.name}`);
-            }
-            
-            // 마우스 위치 업데이트
-            lastMousePos = { x: mouseX, y: mouseY };
-            
-            // 현재 선택된 후보 핀 반환
-            const selectedPin = candidatePins[currentCandidateIndex] || null;
-            
-            // 호버 상태 업데이트
-            updateHoverState(selectedPin, event, candidatePins);
-        }
-
-        // 호버 상태 관리 (개선: 다중 후보 시각적 피드백)
-        function updateHoverState(nearestPin, event, allCandidates = []) {
-            // 모든 기존 호버 상태 제거
-            mapGroup.selectAll('.mission-pin-group').classed('distance-hovered', false);
-            mapGroup.selectAll('.mission-pin').each(function() {
-                this.classList.remove('distance-hovered');
-                this.style.opacity = '';
-                this.style.filter = '';
-            });
-            
-            if (allCandidates.length > 0) {
-                // 모든 후보 핀들에 시각적 피드백 적용
-                allCandidates.forEach((candidate, index) => {
-                    if (candidate.pinDiv) {
-                        if (index === currentCandidateIndex) {
-                            // 현재 선택된 핀: 완전한 호버 효과
-                            candidate.pinDiv.classList.add('distance-hovered');
-                            candidate.pinDiv.style.opacity = '1.0';
-                            candidate.pinDiv.style.filter = '';
-                        } else {
-                            // 다른 후보 핀들: 반투명하게 표시
-                            candidate.pinDiv.style.opacity = '0.7';
-                            candidate.pinDiv.style.filter = 'brightness(1.1)';
-                        }
-                    }
-                });
-                
-                // 선택된 핀이 있으면 툴팁 표시
-                if (nearestPin) {
-                    showTooltip(event, nearestPin.data);
-                    currentHoveredPin = nearestPin;
-                } else {
-                    currentHoveredPin = null;
-                    hideTooltip();
-                }
-            } else {
-                // 후보 핀이 없으면 모든 효과 제거
-                currentHoveredPin = null;
-                hideTooltip();
-            }
-        }
-
-        // 모든 호버 상태 제거 (개선: 다중 후보 시스템 리셋)
-        function clearAllHovers() {
-            // 모든 핀의 호버 상태 및 스타일 제거
-            mapGroup.selectAll('.mission-pin-group').classed('distance-hovered', false);
-            mapGroup.selectAll('.mission-pin').each(function() {
-                this.classList.remove('distance-hovered');
-                this.style.opacity = '';
-                this.style.filter = '';
-            });
-            
-            // 후보 시스템 리셋
-            candidatePins = [];
-            currentCandidateIndex = 0;
-            currentHoveredPin = null;
-            lastMousePos = { x: 0, y: 0 };
-            
-            hideTooltip();
-        }
-
-        // 거리 기반 클릭 처리 (개선: 다중 후보 지원)
-        function handleDistanceBasedClick(mousePos) {
-            if (currentHoveredPin) {
-                console.log(`핀 클릭: ${currentHoveredPin.data.name} (${candidatePins.length}개 후보 중 ${currentCandidateIndex + 1}번째)`);
-                showMissionDetails(currentHoveredPin.data);
-            } else if (candidatePins.length > 0) {
-                // 호버된 핀이 없지만 후보가 있으면 첫 번째 후보 선택
-                console.log(`후보 핀 클릭: ${candidatePins[0].data.name}`);
-                showMissionDetails(candidatePins[0].data);
-            }
-        }
-
-        // [제거됨] adjustOverlappingPins 함수 (사용하지 않음)
-        function adjustOverlappingPins(missions) {
-            console.log('겹친 핀 자동 조정 시작...');
-            
-            // 위치별로 핀들을 그룹화 (소수점 4자리까지 동일한 위치로 판단)
-            const positionGroups = {};
-            const tolerance = 0.0001; // 약 10m 이내를 동일 위치로 판단
-            
-            missions.forEach((mission, index) => {
-                if (!mission.coordinates) return;
-                
-                // 기존 그룹 중 가까운 곳이 있는지 확인
-                let foundGroup = null;
-                for (const [key, group] of Object.entries(positionGroups)) {
-                    const [groupLat, groupLng] = key.split('_').map(Number);
-                    const distance = Math.sqrt(
-                        Math.pow(mission.coordinates.lat - groupLat, 2) + 
-                        Math.pow(mission.coordinates.lng - groupLng, 2)
-                    );
-                    
-                    if (distance < tolerance) {
-                        foundGroup = key;
-                        break;
-                    }
-                }
-                
-                if (foundGroup) {
-                    positionGroups[foundGroup].push({...mission, originalIndex: index});
-                } else {
-                    const key = `${mission.coordinates.lat}_${mission.coordinates.lng}`;
-                    positionGroups[key] = [{...mission, originalIndex: index}];
-                }
-            });
-            
-            let adjustedCount = 0;
-            let groupCount = 0;
-            
-            // 겹친 위치의 핀들에 원형 오프셋 적용
-            Object.entries(positionGroups).forEach(([key, group]) => {
-                if (group.length > 1) {
-                    groupCount++;
-                    console.log(`그룹 ${groupCount}: ${group.length}개 핀이 겹침 - ${group.map(m => m.name).join(', ')}`);
-                    
-                    // 중심 좌표 계산
-                    const centerLat = group.reduce((sum, m) => sum + m.coordinates.lat, 0) / group.length;
-                    const centerLng = group.reduce((sum, m) => sum + m.coordinates.lng, 0) / group.length;
-                    
-                    // 원형 패턴으로 배치 (핀이 작아진 만큼 반경도 축소)
-                    // 반경을 핀 개수에 따라 조정 (더 많은 핀이 겹칠수록 더 넓게 분산)
-                    const baseRadius = 0.0007; // 100m → 70m 반경 (30% 축소)
-                    const radius = baseRadius * Math.max(1, group.length / 3); // 핀 개수에 비례해서 확장
-                    
-                    group.forEach((mission, index) => {
-                        if (index === 0) {
-                            // 첫 번째 핀은 원래 위치 유지
-                            return;
-                        }
-                        
-                        // 나머지 핀들을 원형으로 배치
-                        const angle = (2 * Math.PI * (index - 1)) / Math.max(group.length - 1, 1);
-                        const offsetLat = radius * Math.cos(angle);
-                        const offsetLng = radius * Math.sin(angle);
-                        
-                        // 원본 데이터 업데이트
-                        missions[mission.originalIndex].coordinates.lat = centerLat + offsetLat;
-                        missions[mission.originalIndex].coordinates.lng = centerLng + offsetLng;
-                        
-                        adjustedCount++;
-                        
-                        console.log(`  ✓ ${mission.name}: (${centerLat.toFixed(4)}, ${centerLng.toFixed(4)}) → (${(centerLat + offsetLat).toFixed(4)}, ${(centerLng + offsetLng).toFixed(4)})`);
-                    });
-                }
-            });
-            
-            console.log(`🎯 핀 오프셋 조정 완료: ${groupCount}개 그룹, ${adjustedCount}개 핀 조정됨`);
-            
-            if (groupCount > 0) {
-                console.log('💡 조정된 핀들은 원형 패턴으로 자동 분산 배치되었습니다.');
-                console.log('🔍 확대하면 개별 핀들을 명확히 구분할 수 있습니다.');
-            } else {
-                console.log('✅ 겹치는 핀이 없어 조정할 필요가 없습니다.');
-            }
-            
-            return missions;
-        }
-
-        // 줌 레벨에 따른 핀 크기 조정 함수 (퍼센트 기반)
-        function updatePinSizes(zoomScale) {
-            // 현재 줌 레벨 업데이트 (거리 기반 호버에서 사용)
-            currentZoomLevel = zoomScale;
-            
-            // 줌 스케일에 따른 핀 크기 퍼센트 계산 (축소된 핀에 맞게 조정)
-            // 기본 공식: 크기 = 1 - (줌스케일 - 1) × 감소율
-            const reductionRate = 0.08; // 12% → 8% 감소율 완화 (핀이 작아졌으므로)
-            const minScale = 0.4; // 25% → 40% 최소 크기 증가 (가독성 확보)
-            
-            let pinScale = 1 - ((zoomScale - 1) * reductionRate);
-            pinScale = Math.max(pinScale, minScale); // 최소 크기 제한
-            
-            // 호버 영역 크기 역보정 (축소된 핀에 맞게 조정)
-            const containerScale = 1 / zoomScale; // 줌과 반대로 축소
-            const baseSize = 12; // 4px 핀에 맞게 기본 컨테이너 크기 (호버 영역 확보)
-            const minSize = 12;  // 최소 컨테이너 크기
-            const maxSize = 20;  // 최대 컨테이너 크기
-            
-            // foreignObject 크기 계산 (픽셀 단위로 직접 계산)
-            const calculatedSize = baseSize * containerScale;
-            const newWidth = Math.min(Math.max(calculatedSize, minSize), maxSize);
-            const newHeight = newWidth; // 정사각형 유지
-            
-            mapGroup.selectAll('foreignObject').each(function() {
-                const foreignObj = d3.select(this);
-                foreignObj
-                    .attr('width', newWidth)
-                    .attr('height', newHeight)
-                    .attr('x', -newWidth / 2)  // 중앙 정렬
-                    .attr('y', -newHeight / 2);    // 중앙 정렬
-            });
-            
-            // 핀 div 위치도 새로운 컨테이너 크기에 맞춰 재조정 (중앙 정렬)
-            const pinOffset = Math.max((newWidth - 4) / 2, 0); // 4px 핀에 맞게 조정, 음수 방지
-            const pins = document.querySelectorAll('.mission-pin');
-            pins.forEach(pin => {
-                pin.style.transform = `scale(${pinScale})`;
-                pin.style.transformOrigin = 'center'; // 중앙 기준
-                pin.style.transition = 'transform 0.3s ease';
-                pin.style.top = `${pinOffset}px`;
-                pin.style.left = `${pinOffset}px`;
-            });
-            
-            // 디버깅 정보 (개발 시에만 활성화)
-            console.log(`줌 ${zoomScale.toFixed(2)}x: 컨테이너 ${newWidth.toFixed(1)}px, 핀 스케일 ${pinScale.toFixed(2)}, 오프셋 ${pinOffset.toFixed(1)}px`);
-            
-            // 호버 효과도 줌에 맞춰 조정 (확대 비율 증가)
-            const hoverScale = 2.0 * pinScale; // 2.0배 확대
-            updatePinHoverEffects(pinScale, hoverScale);
-        }
-        
-        // 핀 호버 효과 업데이트 함수 (거리 기반 호버용)
-        function updatePinHoverEffects(normalScale, hoverScale) {
-            // 동적으로 거리 기반 hover 스타일 업데이트
-            let styleElement = document.getElementById('dynamic-pin-styles');
-            if (!styleElement) {
-                styleElement = document.createElement('style');
-                styleElement.id = 'dynamic-pin-styles';
-                document.head.appendChild(styleElement);
-            }
-            
-            // 거리 기반 호버 시스템을 사용하지 않으므로 동적 스타일 업데이트 불필요
-            // styleElement.textContent = ``;
-        }
 
         // CORS 허용된 신뢰할 수 있는 소스들 시도
         const reliableSources = [
@@ -1798,11 +1503,7 @@
                 const rawData = await response.json();
                 
                 // 데이터 검증 및 정리
-                let missions = validateMissionData(rawData.missions || []);
-                
-                // 겹친 핀들 자동 오프셋 조정
-                missions = adjustOverlappingPins(missions);
-                
+                const missions = validateMissionData(rawData.missions || []);
                 missionsData = {
                     missions: missions,
                     statistics: rawData.statistics || {},
@@ -1846,28 +1547,8 @@
                 return;
             }
             
-            // D3 데이터 바인딩으로 핀 생성
-            const pinGroups = mapGroup.selectAll('.mission-pin-group')
-                .data(missionsData.missions)
-                .enter().append('g')
-                .attr('class', 'mission-pin-group')
-                .attr('transform', function(d) {
-                    const coordinates = d.coordinates || {};
-                    const lat = coordinates.lat;
-                    const lng = coordinates.lng;
-                    if (lat && lng && lat !== 0 && lng !== 0) {
-                        const projectedCoords = projection([lng, lat]);
-                        if (projectedCoords && !isNaN(projectedCoords[0]) && !isNaN(projectedCoords[1])) {
-                            return `translate(${projectedCoords[0]}, ${projectedCoords[1]})`;
-                        }
-                    }
-                    return 'translate(0, 0)';
-                })
-                .style('z-index', '100');
-            
-            // 각 핀 그룹에 foreignObject와 핀 div 추가
-            pinGroups.each(function(mission) {
-                const pinGroup = d3.select(this);
+            missionsData.missions.forEach(mission => {
+                // 좌표 데이터 추출
                 const coordinates = mission.coordinates || {};
                 const lat = coordinates.lat;
                 const lng = coordinates.lng;
@@ -1876,40 +1557,40 @@
                 // 유효한 좌표 확인
                 if (lat && lng && lat !== 0 && lng !== 0) {
                     try {
+                        // D3 projection으로 좌표 변환
                         const projectedCoords = projection([lng, lat]);
                         
                         if (projectedCoords && !isNaN(projectedCoords[0]) && !isNaN(projectedCoords[1])) {
+                            // SVG 그룹 생성 (지도와 함께 확대/축소됨)
+                            const pinGroup = mapGroup.append('g')
+                                .attr('class', 'mission-pin-group')
+                                .attr('transform', `translate(${projectedCoords[0]}, ${projectedCoords[1]})`)
+                                .style('z-index', '100');
                             
-                            // foreignObject로 HTML 핀 삽입 (4px 핀 최적화, 호버 영역 확보)
+                            // foreignObject로 HTML 핀 삽입
                             const foreignObject = pinGroup.append('foreignObject')
-                                .attr('x', -6) // 12px 컨테이너 중앙 정렬
-                                .attr('y', -6) // 핀 중앙이 정확한 위치에 오도록
-                                .attr('width', 12) // 호버 영역 확보
-                                .attr('height', 12); // 호버 영역 확보
+                                .attr('x', -10) // 핀 중앙 정렬 (20px / 2 = 10px)
+                                .attr('y', -20) // 핀 하단이 정확한 위치, 호버 확대 공간 확보
+                                .attr('width', 25)
+                                .attr('height', 25);
                             
-                            // HTML div 생성 - 컨테이너 중앙에 4px 핀 배치 (직접 이벤트 바인딩)
+                            // HTML div 생성 - 컨테이너 중앙에 12px 핀 배치
                             const pinDiv = foreignObject.append('xhtml:div')
                                 .attr('class', `mission-pin ${mission.status}`)
-                                .attr('data-mission-id', mission.id)
-                                .style('width', '4px')
-                                .style('height', '4px')
+                                .style('width', '12px')
+                                .style('height', '12px')
                                 .style('position', 'absolute')
-                                .style('top', '4px')    // 12px 컨테이너에서 4px 오프셋 (12-4)/2 = 4
-                                .style('left', '4px')   // 12px 컨테이너에서 4px 오프셋 (12-4)/2 = 4
+                                .style('top', '8px')   // 20px 컨테이너의 하단에서 12px 위
+                                .style('left', '4px')  // 중앙 정렬 (20-12)/2 = 4px
                                 .style('cursor', 'pointer')
-                                // 직접 이벤트 바인딩
                                 .on('click', () => {
                                     showMissionDetails(mission);
                                 })
                                 .on('mouseenter', function(event) {
                                     showTooltip(event, mission);
-                                    // 호버 효과 추가 (1.3배로 살짝만)
-                                    d3.select(this).style('transform', 'scale(1.3)');
                                 })
-                                .on('mouseleave', function() {
+                                .on('mouseleave', () => {
                                     hideTooltip();
-                                    // 호버 효과 제거 (원래 크기로)
-                                    d3.select(this).style('transform', 'scale(1.0)');
                                 })
                                 .on('mousemove', function(event) {
                                     updateTooltipPosition(event);
@@ -1928,12 +1609,6 @@
             });
             
             console.log(`SVG 핀 렌더링 완료`);
-            
-            // 초기 핀 크기 및 호버 영역 설정 (줌 레벨 1.0)
-            setTimeout(() => {
-                updatePinSizes(1);
-                console.log('초기 핀 크기 및 호버 영역 설정 완료');
-            }, 200);
         }
         
         // 한국어 ↔ 영어 국가명 매핑 테이블
@@ -2239,8 +1914,6 @@
                 zoom.transform,
                 d3.zoomIdentity
             );
-            // 초기화 시 핀 크기도 원래대로 복원
-            setTimeout(() => updatePinSizes(1), 500);
         }
 
         // 툴팁 관련 함수들
